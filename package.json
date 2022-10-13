@@ -6,8 +6,8 @@
   "dependencies": {
     "discord.js": "^11.5.1",
     "express": "^4.17.1",
-    "firebase": "^7.6.0",
-    "firebase-admin": "^8.8.0",
+    "firebase": "^9.12.1",
+    "firebase-admin": "^11.1.0",
     "mkdirp": "^0.5.1",
     "pg": "^7.15.0",
     "prism-media": "^1.1.0",
