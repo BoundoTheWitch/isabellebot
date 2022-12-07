@@ -1,28 +1,20 @@
 {
-  "name": "discord-bot",
-  "version": "1.0.0",
-  "description": "A Discord bot for Lady Goggle's Discord server \"Goggles' Starry Night.\"",
-  "main": "app.js",
   "dependencies": {
-    "discord.js": "^11.5.1",
-    "express": "^4.17.1",
-    "firebase": "^7.6.0",
-    "firebase-admin": "^8.8.0",
-    "mkdirp": "^0.5.1",
-    "pg": "^7.15.0",
-    "prism-media": "^1.1.0",
-    "ws": "^7.2.1"
+    "discord.js": "^14.7.1"
   },
-  "devDependencies": {},
+  "name": "isabellebot",
+  "description": "It's been a while, the Discord API has changed a lot, and I have a strong urge to try and do programming again. Let's tackle it slowly, piece by piece.",
+  "version": "1.0.0",
+  "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zeechapman/isabellebot.git"
   },
+  "author": "",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/zeechapman/isabellebot/issues"
   },
