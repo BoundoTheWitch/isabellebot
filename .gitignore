@@ -74,10 +74,3 @@ typings/
 
 # FuseBox cache
 .fusebox/
-
-# Protection
-data.js
-serviceAccountKey.json
-
-# Local script that doesn't need to be on GH
-PushMerge.sh
