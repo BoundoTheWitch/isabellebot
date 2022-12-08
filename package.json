@@ -3,7 +3,7 @@
     "discord.js": "^14.7.1"
   },
   "name": "isabellebot",
-  "description": "It's been a while, the Discord API has changed a lot, and I have a strong urge to try and do programming again. Let's tackle it slowly, piece by piece.",
+  "description": "A Discord bot that runs on Discord.js made for a specific server.",
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
