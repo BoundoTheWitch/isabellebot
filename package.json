@@ -1,6 +1,7 @@
 {
   "dependencies": {
-    "discord.js": "^14.7.1"
+    "discord.js": "^14.7.1",
+    "dotenv": "^16.0.3"
   },
   "name": "isabellebot",
   "description": "A Discord bot that runs on Discord.js made for a specific server.",
