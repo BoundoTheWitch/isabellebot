@@ -4,6 +4,7 @@ dotenv.config();
 const fs = require('node:fs');
 const path = require('path');
 
+// Discord.js
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const client = new Client({
     intents: [
@@ -16,6 +17,7 @@ const client = new Client({
 
 client.commands = new Collection();
 
+// Populating commands
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
@@ -25,7 +27,7 @@ for (const file of commandFiles) {
     if ('data' in command && 'execute' in command) {
         client.commands.set(command.data.name, command);
     } else {
-        console.log(`The command at ${filePath} is missing. Make sure there is a 'data' or 'execute' property`);
+        console.log(`Command "/${filePath}" is missing 'data' or 'execute'. Skipping.`);
     }
 }
 
