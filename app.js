@@ -20,16 +20,23 @@ client.commands = new Collection();
 // Populating commands
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+let list = [];
 
 for (const file of commandFiles) {
     const filePath = path.join(commandsPath, file);
     const command = require(filePath);
     if ('data' in command && 'execute' in command) {
         client.commands.set(command.data.name, command);
+        list.push({name: command.data.name, desc: command.data.description});
     } else {
         console.log(`Command "/${filePath}" is missing 'data' or 'execute'. Skipping.`);
     }
 }
+
+fs.writeFile('./commands/list.json', JSON.stringify(list), (err) => {
+    if (err) return console.error(err);
+});
+
 
 client.on('ready', () => {
     console.log(`${client.user.tag} online.`)
