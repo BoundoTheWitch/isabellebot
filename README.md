@@ -7,12 +7,12 @@ It's been a while, the Discord API has changed a lot, and I have a strong urge t
 - [x] Bring her back online (or at least the test bot)
 - [x] Basic functionality and then some
     - [x] Bring back simple commands (/hug and /caw)
-- [ ] Add /help to list commands
-- [ ] Deploy Isabelle Bot back to the wild
+- [x] Add /help to list commands
 - [ ] Logs in logs channel
     - [ ] Log edited and deleted posts
     - [ ] Safely show edited and deleted posts that contain a link (for safety don't allow it to keep the link clickable)
     - [ ] For images make it only show `There was an image` as to not save the image in case someone uploads something embarrassing
+- [ ] Deploy Isabelle Bot back to the wild
 - [ ] Reading challenge stuff
     - [ ] Track when user leaves their star (todo: ask everyone to agree on a star instead of 20 different emojis)
         - [ ] Set up database (MongoDB probably would be easiest)
