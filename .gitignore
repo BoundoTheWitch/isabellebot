@@ -74,3 +74,6 @@ typings/
 
 # FuseBox cache
 .fusebox/
+
+# File is rewritten each time. No need to include in repo
+commands/list.json
