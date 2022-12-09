@@ -5,8 +5,10 @@ It's been a while, the Discord API has changed a lot, and I have a strong urge t
 
 # TODO
 - [x] Bring her back online (or at least the test bot)
-- [ ] Basic functionality and then some
-    - [ ] Bring back simple commands (/hug and /caw)
+- [x] Basic functionality and then some
+    - [x] Bring back simple commands (/hug and /caw)
+- [ ] Add /help to list commands
+- [ ] Deploy Isabelle Bot back to the wild
 - [ ] Logs in logs channel
     - [ ] Log edited and deleted posts
     - [ ] Safely show edited and deleted posts that contain a link (for safety don't allow it to keep the link clickable)

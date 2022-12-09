@@ -19,7 +19,7 @@ const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
         console.log(`Refreshing ${commands.length} commands.`);
 
         const data = await rest.put(
-            Routes.applicationGuildCommands(process.env.CLIENT, process.env.SERVER),
+            Routes.applicationCommands(process.env.CLIENT),
             { body: commands },
         );
     } catch (err) {
