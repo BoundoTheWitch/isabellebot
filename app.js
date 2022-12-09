@@ -5,7 +5,7 @@ const fs = require('node:fs');
 const path = require('path');
 
 // Discord.js
-const { Client, GatewayIntentBits, Collection } = require('discord.js');
+const { Client, GatewayIntentBits, Collection, ActivityType } = require('discord.js');
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -33,14 +33,18 @@ for (const file of commandFiles) {
     }
 }
 
+// Write list to file
 fs.writeFile('./commands/list.json', JSON.stringify(list), (err) => {
     if (err) return console.error(err);
 });
 
 
 client.on('ready', () => {
+    client.user.setActivity('the mayor', { type: ActivityType.Listening })
     console.log(`${client.user.tag} online.`)
 });
+
+
 
 client.on('interactionCreate', async interaction => {
     if (!interaction.isChatInputCommand()) return;
