@@ -5,7 +5,7 @@ const fs = require('node:fs');
 const path = require('path');
 
 // Discord.js
-const { Client, GatewayIntentBits, Collection, ActivityType } = require('discord.js');
+const { Client, GatewayIntentBits, Collection, ActivityType, EmbedBuilder } = require('discord.js');
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -66,7 +66,14 @@ client.on('interactionCreate', async interaction => {
 // Edited messages
 client.on('messageUpdate', async (msg, newMsg) => {
     const logchannel = client.channels.cache.find(ch => ch.name === "event-logs");
-    logchannel.send("Hello?");
+    const embed = new EmbedBuilder()
+        .setColor(0x4781f0)
+        .setTitle("Message was edited")
+        .addFields({ name: "Old message", value: msg.content })
+        .addFields({ name: "New message", value: newMsg.content })
+        .setFooter({text: "From #" + msg.channel.name })
+
+    logchannel.send({embeds: [embed]});
 });
 
 
