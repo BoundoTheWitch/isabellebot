@@ -12,15 +12,15 @@ const client = new Client({
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.GuildMembers,
         GatewayIntentBits.DirectMessages,
+        GatewayIntentBits.MessageContent,
     ]
 });
-
 client.commands = new Collection();
 
 // Populating commands
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
-let list = [];
+let list = []; // Empty list of commands to add to file later
 
 for (const file of commandFiles) {
     const filePath = path.join(commandsPath, file);
@@ -38,14 +38,13 @@ fs.writeFile('./commands/list.json', JSON.stringify(list), (err) => {
     if (err) return console.error(err);
 });
 
-
+// On startup
 client.on('ready', () => {
     client.user.setActivity('the mayor', { type: ActivityType.Listening })
     console.log(`${client.user.tag} online.`)
 });
 
-
-
+// Message posted
 client.on('interactionCreate', async interaction => {
     if (!interaction.isChatInputCommand()) return;
 
@@ -63,5 +62,12 @@ client.on('interactionCreate', async interaction => {
         await interaction.reply({ content: 'Hmmm...there was an error trying to do that command.', ephemeral: true });
     }
 });
+
+// Edited messages
+client.on('messageUpdate', async (msg, newMsg) => {
+    const logchannel = client.channels.cache.find(ch => ch.name === "event-logs");
+    logchannel.send("Hello?");
+});
+
 
 client.login(process.env.TOKEN);
