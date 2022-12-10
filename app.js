@@ -63,6 +63,8 @@ client.on('interactionCreate', async interaction => {
     }
 });
 
+/// TODO Move events to seperate files to clean up
+
 // Edited messages
 client.on('messageUpdate', async (msg, newMsg) => {
     const logchannel = client.channels.cache.find(ch => ch.name === "event-logs");
@@ -71,10 +73,21 @@ client.on('messageUpdate', async (msg, newMsg) => {
         .setTitle("Message was edited")
         .addFields({ name: "Old message", value: msg.content })
         .addFields({ name: "New message", value: newMsg.content })
-        .setFooter({text: "From #" + msg.channel.name })
+        .setFooter({ text: "From #" + msg.channel.name })
 
-    logchannel.send({embeds: [embed]});
+    logchannel.send({ embeds: [embed] });
 });
 
+// On message delete
+client.on("messageDelete", msg => {
+    const logchannel = client.channels.cache.find(ch => ch.name === "event-logs");
+    const embed = new EmbedBuilder()
+        .setColor(0xf16363)
+        .setTitle("Message was deleted")
+        .addFields({ name: "Message", value: msg.content })
+        .setFooter({ text: "From #" + msg.channel.name })
+
+    logchannel.send({ embeds: [embed] })
+})
 
 client.login(process.env.TOKEN);
