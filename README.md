@@ -9,7 +9,7 @@ It's been a while, the Discord API has changed a lot, and I have a strong urge t
     - [x] Bring back simple commands (/hug and /caw)
 - [x] Add /help to list commands
 - [ ] Logs in logs channel
-    - [ ] Log edited and deleted posts
+    - [x] Log edited and deleted posts
     - [ ] Safely show edited and deleted posts that contain a link (for safety don't allow it to keep the link clickable)
     - [ ] For images make it only show `There was an image` as to not save the image in case someone uploads something embarrassing
 - [ ] Reading challenge stuff
