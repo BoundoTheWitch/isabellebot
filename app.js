@@ -63,27 +63,37 @@ client.on('interactionCreate', async interaction => {
     }
 });
 
-/// TODO Move events to seperate files to clean up
-/// TODO Test on posts with images and URLs
-/// TODO Prevent bot from reading itself (too tired right now)
+// TODO Move events to seperate files to clean up
+// TODO Test edited and deleted with images
+// TODO Add ticks (`) to the start and end of URL to keep from being clickable
+// TODO Prevent bot from reading itself (too tired right now)
 
 
 // Edited messages
 client.on('messageUpdate', async (msg, newMsg) => {
-    const logchannel = client.channels.cache.find(ch => ch.name === "event-logs");
-    const embed = new EmbedBuilder()
-        .setColor(0x4781f0)
-        .setTitle("Message was edited")
-        .addFields({ name: "Old message", value: msg.content })
-        .addFields({ name: "New message", value: newMsg.content })
-        .setFooter({ text: "From #" + msg.channel.name })
-
-    logchannel.send({ embeds: [embed] });
+    if (msg.content === msg.newMsg) {
+        // Sometimes the bot will see a URL as a edited message because it creates a embed for the user
+        return;
+    } else {
+        let regexURL = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/ig;
+        let urlMatches = msg.content.match(regexURL);
+        console.log(urlMatches);
+        const logchannel = client.channels.cache.find(ch => ch.name === "event-logs");
+        const embed = new EmbedBuilder()
+            .setColor(0x4781f0)
+            .setTitle("Message was edited")
+            .addFields({ name: "Old message", value: msg.content })
+            .addFields({ name: "New message", value: newMsg.content })
+            .setFooter({ text: "From #" + msg.channel.name })
+    
+        logchannel.send({ embeds: [embed] });
+    }
 });
 
 // On message delete
 client.on("messageDelete", msg => {
     const logchannel = client.channels.cache.find(ch => ch.name === "event-logs");
+    
     const embed = new EmbedBuilder()
         .setColor(0xf16363)
         .setTitle("Message was deleted")
