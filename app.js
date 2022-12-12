@@ -66,45 +66,49 @@ client.on('interactionCreate', async interaction => {
 });
 
 // TODO Move events to seperate files to clean up
-// TODO Test edited and deleted with images
-// TODO Prevent bot from reading itself (too tired right now)
 
 
 // Edited messages
 client.on('messageUpdate', async (msg, newMsg) => {
-    if (msg.author.id === client.user.id) {
-        return;
-    } else {
-        if (msg.content === msg.newMsg) {
-            // Sometimes the bot will see a URL as a edited message because Discord makes an embed
+    try {
+        const logchannel = client.channels.cache.find(ch => ch.name === "event-logs");
+        if (msg.author.id === client.user.id) {
             return;
         } else {
-            const logchannel = client.channels.cache.find(ch => ch.name === "event-logs");
-            const embed = new EmbedBuilder()
-                .setColor(0x4781f0)
-                .setTitle("Message was edited")
-                .addFields({ name: "Old message", value: urlFilter(msg.content) })
-                .addFields({ name: "New message", value: urlFilter(newMsg.content) })
-                .setFooter({ text: "From #" + msg.channel.name + "\nBy " + msg.author.username })
-        
-            logchannel.send({ embeds: [embed] });
+            if (msg.content === msg.newMsg) {
+                return;
+            } else {
+                const embed = new EmbedBuilder()
+                    .setColor(0x4781f0)
+                    .setTitle("Message was edited")
+                    .addFields({ name: "Old message", value: urlFilter(msg.content) })
+                    .addFields({ name: "New message", value: urlFilter(newMsg.content) })
+                    .setFooter({ text: "From #" + msg.channel.name + "\nBy " + msg.author.username });
+                logchannel.send({ embeds: [embed] });
+            }
         }
+    } catch (err) {
+        console.log(err);
     }
 });
 
 // On message delete
 client.on("messageDelete", msg => {
-    if (msg.author.id === client.user.id) {
-        return;
-    } else {
-        const logchannel = client.channels.cache.find(ch => ch.name === "event-logs");
-        const embed = new EmbedBuilder()
-            .setColor(0xf16363)
-            .setTitle("Message was deleted")
-            .addFields({ name: "Message", value: urlFilter(msg.content) })
-            .setFooter({ text: "From #" + msg.channel.name + "\nBy " + msg.author.username })
-    
-        logchannel.send({ embeds: [embed] });
+    try {
+        if (msg.author.id === client.user.id) {
+            return;
+        } else {
+            const logchannel = client.channels.cache.find(ch => ch.name === "event-logs");
+            const embed = new EmbedBuilder()
+                .setColor(0xf16363)
+                .setTitle("Message was deleted")
+                .addFields({ name: "Message", value: urlFilter(msg.content) })
+                .setFooter({ text: "From #" + msg.channel.name + "\nBy " + msg.author.username })
+        
+            logchannel.send({ embeds: [embed] });
+        }
+    } catch (err) {
+        console.log(err);
     }
 })
 
