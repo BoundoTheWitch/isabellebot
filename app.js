@@ -1,3 +1,5 @@
+const urlFilter = require('./urlFilter');
+
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -75,15 +77,12 @@ client.on('messageUpdate', async (msg, newMsg) => {
         // Sometimes the bot will see a URL as a edited message because it creates a embed for the user
         return;
     } else {
-        let regexURL = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/ig;
-        let urlMatches = msg.content.match(regexURL);
-        console.log(urlMatches);
         const logchannel = client.channels.cache.find(ch => ch.name === "event-logs");
         const embed = new EmbedBuilder()
             .setColor(0x4781f0)
             .setTitle("Message was edited")
-            .addFields({ name: "Old message", value: msg.content })
-            .addFields({ name: "New message", value: newMsg.content })
+            .addFields({ name: "Old message", value: urlFilter(msg.content) })
+            .addFields({ name: "New message", value: urlFilter(newMsg.content) })
             .setFooter({ text: "From #" + msg.channel.name })
     
         logchannel.send({ embeds: [embed] });
@@ -97,7 +96,7 @@ client.on("messageDelete", msg => {
     const embed = new EmbedBuilder()
         .setColor(0xf16363)
         .setTitle("Message was deleted")
-        .addFields({ name: "Message", value: msg.content })
+        .addFields({ name: "Message", value: urlFilter(msg.content) })
         .setFooter({ text: "From #" + msg.channel.name })
 
     logchannel.send({ embeds: [embed] })
