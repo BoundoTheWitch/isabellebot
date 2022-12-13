@@ -13,10 +13,10 @@ It's been a while, the Discord API has changed a lot, and I have a strong urge t
     - [x] Safely show edited and deleted posts that contain a link (for safety don't allow it to keep the link clickable)
     - [x] For images make it only show `There was an image` as to not save the image in case someone uploads something embarrassing
 - [ ] Reading challenge stuff
-    - [ ] Track when user leaves their star (todo: ask everyone to agree on a star instead of 20 different emojis)
-        - [ ] Set up database (MongoDB probably would be easiest)
+    - [ ] Track when user leaves their star
+        - [ ] Set up database
     - [ ] Find way to show progress (streaks, highest streak per user, etc)
-    - [ ] Add reminder for users to post their stars
+    - [ ] Add reminder for users to post their stars (optional)
     - [ ] Find way to allow a user to post a star from previous day if they forget
 - [ ] Deploy Isabelle Bot back to the wild
 - [ ] Work on bringing in the "fun" commands again (if requested)
