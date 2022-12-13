@@ -1,5 +1,4 @@
 const urlFilter = require('./urlFilter');
-
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -7,7 +6,7 @@ const fs = require('node:fs');
 const path = require('path');
 
 // Discord.js
-const { Client, GatewayIntentBits, Collection, ActivityType, EmbedBuilder, MessageType } = require('discord.js');
+const { Client, GatewayIntentBits, Collection, ActivityType, EmbedBuilder } = require('discord.js');
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -66,7 +65,6 @@ client.on('interactionCreate', async interaction => {
 });
 
 // TODO Move events to seperate files to clean up
-
 
 // Edited messages
 client.on('messageUpdate', async (msg, newMsg) => {
