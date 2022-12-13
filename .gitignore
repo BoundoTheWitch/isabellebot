@@ -77,3 +77,8 @@ typings/
 
 # File is rewritten each time. No need to include in repo
 commands/list.json
+
+# No need to include a test file
+test.js
+
+*.sqlite
