@@ -32,7 +32,12 @@ const Stars = sequelize.define('stars', {
     last_star: DataTypes.STRING
 });
 
-const addStar = async (userID) => {
+/**
+ * Adds a star for the user
+ * @param {String} userID 
+ * @param {Boolean} onTime
+ */
+const addStar = async (userID, onTime) => {
     Stars.sync()
     .then(() => {
         const user = Stars.findOne({ where: { user_id: userID }, raw: true });
@@ -40,21 +45,20 @@ const addStar = async (userID) => {
     })
     .then(data => {
         let currDate = new Date();
-        if (data) {
-            let date = new Date(data.last_star);
-            let currStars = data.stars_count;
-            let currStreak = data.highest_streak;
-            if (date.getDate() === currDate.getDate()) {
-                currStars = currStars + 1;
-                if (currStars > currStreak)
-                    currStreak = currStars;
-                Stars.update({ stars_count: currStars, last_star: currDate.toString(), highest_streak: currStreak }, { where: { user_id: userID } });
-            } else {
-                Stars.update({ stars_count: 1, last_star: currDate.toString() }, { where: { user_id: userID }})
-            }
+        let date = new Date(data.last_star);
+        let currStars = data.stars_count;
+        let currStreak = data.highest_streak;
+        let onT = onTime;
+        if (onT) {
+            if (date.getDate() < currDate.getDate() + 1)
+            currStars = currStars + 1;
+            if (currStars > currStreak)
+                currStreak = currStars;
+            Stars.update({ stars_count: currStars, last_star: currDate.toString(), highest_streak: currStreak }, { where: { user_id: userID } });
         } else {
-            Stars.create({ user_id: userID.toString(), last_star: currDate.toString() });
-            console.log(`New user added: ${userID}`);
+            if (currStars > currStreak)
+                currStreak = currStars;
+            Stars.update({ stars_count: 1, last_star: currDate.toString(), highest_streak: currStreak }, { where: { user_id: userID } });
         }
     })
     .catch(err => console.error("Error", err));
@@ -77,12 +81,37 @@ const checkUser = async (userID) => {
     });
     return res;
 }
-
+/**
+ * Adds new user
+ * @param {String} userID 
+ */
 const newUser = async (userID) => {
     Stars.sync()
-    .then(() => {
-        const user = Stars.create({ user_id: userID.toString(), last_star: currDate.toString() });
-    })
+    .then(() => Stars.create({ user_id: userID.toString(), last_star: currDate.toString() }) )
     .catch(err => console.error(err));
 }
-module.exports = { newUser, addStar, checkUser };
+
+/**
+ * Checks to see if user already left star on the same day.
+ * @param {String} userID 
+ * @returns Boolean
+ */
+const checkStar = async (userID) => {
+    let res = Stars.sync()
+    .then(() => {
+        const user = Stars.findOne({ where: { user_id: userID }, raw: true });
+        return user;
+    })
+    .then(data => {
+        let currDate = new Date();
+        let date = new Date(data.last_star);
+        if (date.getDate() === currDate.getDate()) {
+            return true;
+        } else {
+            return false;
+        }
+    })
+    .catch(err => console.error("Error", err));
+    return res;
+}
+module.exports = { newUser, addStar, checkUser, checkStar };
