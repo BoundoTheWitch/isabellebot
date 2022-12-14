@@ -1,8 +1,6 @@
-// TODO Check if streak can end after midnight (not gonna change system time just to try at the moment)
-// TODO Make special greetings if user is checking in for the first time
+// TODO Make special greetings if user is checking in for the first time (maybe add method to check first then return true or false)
 // TODO Find way to send ping to every user everyday (who is participating)
 // TODO Stop with TODOs
-
 const { Sequelize, DataTypes } = require('sequelize');
 
 const sequelize = new Sequelize('database', 'username', 'password', {
@@ -34,13 +32,13 @@ const Stars = sequelize.define('stars', {
     last_star: DataTypes.STRING
 });
 
-const addStar = (userID) => {
+const addStar = async (userID) => {
     Stars.sync()
     .then(() => {
-        const user = Stars.findOne({ where: {user_id: userID }, raw: true});
+        const user = Stars.findOne({ where: { user_id: userID }, raw: true });
         return user;
     })
-    .then((data) => {
+    .then(data => {
         let currDate = new Date();
         if (data) {
             let date = new Date(data.last_star);
@@ -59,6 +57,32 @@ const addStar = (userID) => {
             console.log(`New user added: ${userID}`);
         }
     })
-    .catch((err) => console.error("Error", err));
+    .catch(err => console.error("Error", err));
 };
-module.exports = { addStar };
+
+/**
+ * Returns true or false
+ * @param {String} userID 
+ * @returns Boolean
+ */
+const checkUser = async (userID) => {
+    let res = Stars.sync()
+    .then(() => {
+        const user = Stars.findOne({ where: { user_id: userID }, raw: true });
+        return user;
+    })
+    .then(data => {
+        if (data) return true;
+        else return false;
+    });
+    return res;
+}
+
+const newUser = async (userID) => {
+    Stars.sync()
+    .then(() => {
+        const user = Stars.create({ user_id: userID.toString(), last_star: currDate.toString() });
+    })
+    .catch(err => console.error(err));
+}
+module.exports = { newUser, addStar, checkUser };
