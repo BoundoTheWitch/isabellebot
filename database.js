@@ -1,4 +1,7 @@
-// TODO Finish so it can update and add users appropriately
+// TODO Check if streak can end after midnight (not gonna change system time just to try at the moment)
+// TODO Make special greetings if user is checking in for the first time
+// TODO Find way to send ping to every user everyday (who is participating)
+// TODO Stop with TODOs
 
 const { Sequelize, DataTypes } = require('sequelize');
 
@@ -20,17 +23,42 @@ const Stars = sequelize.define('stars', {
     },
     stars_count: {
         type: DataTypes.INTEGER,
-        defaultValue: 0,
+        defaultValue: 1,
         allowNull: false
     },
-    highest_streak: DataTypes.INTEGER,
+    highest_streak: {
+        type: DataTypes.INTEGER,
+        defaultValue: 1,
+        allowNull: false
+    },
     last_star: DataTypes.STRING
 });
 
-
-Stars.sync()
+const addStar = (userID) => {
+    Stars.sync()
     .then(() => {
-        // const build = Stars.build({ user_id: USER, current_stars: INT, highest_streak: INT, last_star: new Date().toString() });
-        return build.save();
+        const user = Stars.findOne({ where: {user_id: userID }, raw: true});
+        return user;
     })
-    .catch(err => console.log("Error syncing model", err));
+    .then((data) => {
+        let currDate = new Date();
+        if (data) {
+            let date = new Date(data.last_star);
+            let currStars = data.stars_count;
+            let currStreak = data.highest_streak;
+            if (date.getDate() === currDate.getDate()) {
+                currStars = currStars + 1;
+                if (currStars > currStreak)
+                    currStreak = currStars;
+                Stars.update({ stars_count: currStars, last_star: currDate.toString(), highest_streak: currStreak }, { where: { user_id: userID } });
+            } else {
+                Stars.update({ stars_count: 1, last_star: currDate.toString() }, { where: { user_id: userID }})
+            }
+        } else {
+            Stars.create({ user_id: userID.toString(), last_star: currDate.toString() });
+            console.log(`New user added: ${userID}`);
+        }
+    })
+    .catch((err) => console.error("Error", err));
+};
+module.exports = { addStar };
