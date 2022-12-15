@@ -1,7 +1,9 @@
 // TODO Make special greetings if user is checking in for the first time (maybe add method to check first then return true or false)
 // TODO Find way to send ping to every user everyday (who is participating)
-// TODO Stop with TODOs
+// TODO Account for month change
 const { Sequelize, DataTypes } = require('sequelize');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const sequelize = new Sequelize('database', 'username', 'password', {
     host: 'localhost',
@@ -32,12 +34,14 @@ const Stars = sequelize.define('stars', {
     last_star: DataTypes.STRING
 });
 
+Stars.sync();
+
 /**
  * Adds a star for the user
  * @param {String} userID 
  * @param {Boolean} onTime
  */
-const addStar = async (userID, onTime) => {
+const addStar = async (userID) => {
     Stars.sync()
     .then(() => {
         const user = Stars.findOne({ where: { user_id: userID }, raw: true });
@@ -48,18 +52,16 @@ const addStar = async (userID, onTime) => {
         let date = new Date(data.last_star);
         let currStars = data.stars_count;
         let currStreak = data.highest_streak;
-        let onT = onTime;
-        if (onT) {
-            if (date.getDate() < currDate.getDate() + 1)
+
+        if ((currDate.getDate() - 2) < date.getDate()) {
             currStars = currStars + 1;
-            if (currStars > currStreak)
-                currStreak = currStars;
-            Stars.update({ stars_count: currStars, last_star: currDate.toString(), highest_streak: currStreak }, { where: { user_id: userID } });
-        } else {
-            if (currStars > currStreak)
-                currStreak = currStars;
-            Stars.update({ stars_count: 1, last_star: currDate.toString(), highest_streak: currStreak }, { where: { user_id: userID } });
         }
+        else
+            currStars = 1;
+        if (currStars > currStreak)
+            currStreak = currStars;
+        
+        Stars.update({ stars_count: currStars, last_star: currDate.toString(), highest_streak: currStreak }, { where: { user_id: userID } });
     })
     .catch(err => console.error("Error", err));
 };
@@ -86,6 +88,7 @@ const checkUser = async (userID) => {
  * @param {String} userID 
  */
 const newUser = async (userID) => {
+    let currDate = new Date();
     Stars.sync()
     .then(() => Stars.create({ user_id: userID.toString(), last_star: currDate.toString() }) )
     .catch(err => console.error(err));
@@ -114,4 +117,16 @@ const checkStar = async (userID) => {
     .catch(err => console.error("Error", err));
     return res;
 }
-module.exports = { newUser, addStar, checkUser, checkStar };
+
+/**
+ * FOR INTERNAL USE ONLY. Clears out database.
+ * @param {String} pass The password
+ */
+const clearDB = (pass) => {
+    if (pass === process.env.DBPASS) {
+        sequelize.drop();
+    } else {
+        console.error("That's not the password, dummy!");
+    }
+}
+module.exports = { newUser, addStar, checkUser, checkStar, clearDB };
