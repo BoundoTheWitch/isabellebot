@@ -12,6 +12,7 @@ It's been a while, the Discord API has changed a lot, and I have a strong urge t
     - [x] Log edited and deleted posts
     - [x] Safely show edited and deleted posts that contain a link (for safety don't allow it to keep the link clickable)
     - [x] For images make it only show `There was an image` as to not save the image in case someone uploads something embarrassing
+        - [ ] (optional) If asked, make a way to show what the image was as a link since Discord saves the uploaded images. Only if requested, otherwise not a required task.
 - [ ] Reading challenge stuff
     - [x] Track when user leaves their star
         - [x] Set up database
