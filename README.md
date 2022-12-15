@@ -19,6 +19,7 @@ It's been a while, the Discord API has changed a lot, and I have a strong urge t
     - [ ] Find way to show progress (streaks, highest streak per user, etc)
     - [ ] Add reminder for users to post their stars (optional)
     - [x] ~~Find way to allow a user to post a star from previous day if they forget~~ (might be too difficult)
+- [ ] Set up machine to host Isabelle Bot on
 - [ ] Deploy Isabelle Bot back to the wild
 - [ ] Work on bringing in the "fun" commands again (if requested)
 - [ ] ~~Dadbot~~
