@@ -124,6 +124,14 @@ const checkStar = async (userID) => {
 }
 
 /**
+ * Get every user and their stars and return it as an array
+ * Similar to SELECT * FROM stars
+ */
+const getStars = async () => {
+    // TODO Get username, stars_count, highest_streak
+}
+
+/**
  * FOR INTERNAL USE ONLY. Clears out database.
  * @param {String} pass The password
  */
@@ -134,4 +142,4 @@ const clearDB = (pass) => {
         console.error("That's not the password, dummy!");
     }
 }
-module.exports = { newUser, addStar, checkUser, checkStar, clearDB };
+module.exports = { newUser, addStar, checkUser, checkStar, getStars, clearDB };
