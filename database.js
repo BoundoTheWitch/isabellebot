@@ -17,7 +17,7 @@ sequelize.authenticate()
     .catch(err => console.log("Error connecting to database.", err));
 
 const Stars = sequelize.define('stars', {
-    user_id: {
+    username: {
         type: DataTypes.STRING,
         unique: true,
     },
@@ -38,13 +38,13 @@ Stars.sync();
 
 /**
  * Adds a star for the user
- * @param {String} userID 
+ * @param {String} name 
  * @param {Boolean} onTime
  */
-const addStar = async (userID) => {
+const addStar = async (name) => {
     Stars.sync()
     .then(() => {
-        const user = Stars.findOne({ where: { user_id: userID }, raw: true });
+        const user = Stars.findOne({ where: { username: name }, raw: true });
         return user;
     })
     .then(data => {
@@ -61,20 +61,20 @@ const addStar = async (userID) => {
         if (currStars > currStreak)
             currStreak = currStars;
         
-        Stars.update({ stars_count: currStars, last_star: currDate.toString(), highest_streak: currStreak }, { where: { user_id: userID } });
+        Stars.update({ stars_count: currStars, last_star: currDate.toString(), highest_streak: currStreak }, { where: { username: name } });
     })
     .catch(err => console.error("Error", err));
 };
 
 /**
  * Returns true or false
- * @param {String} userID 
+ * @param {String} name
  * @returns Boolean
  */
-const checkUser = async (userID) => {
+const checkUser = async (name) => {
     let res = Stars.sync()
     .then(() => {
-        const user = Stars.findOne({ where: { user_id: userID }, raw: true });
+        const user = Stars.findOne({ where: { username: name }, raw: true });
         return user;
     })
     .then(data => {
@@ -85,24 +85,24 @@ const checkUser = async (userID) => {
 }
 /**
  * Adds new user
- * @param {String} userID 
+ * @param {String} name 
  */
-const newUser = async (userID) => {
+const newUser = async (name) => {
     let currDate = new Date();
     Stars.sync()
-    .then(() => Stars.create({ user_id: userID.toString(), last_star: currDate.toString() }) )
+    .then(() => Stars.create({ username: name.toString(), last_star: currDate.toString() }) )
     .catch(err => console.error(err));
 }
 
 /**
  * Checks to see if user already left star on the same day.
- * @param {String} userID 
+ * @param {String} name
  * @returns Boolean
  */
-const checkStar = async (userID) => {
+const checkStar = async (name) => {
     let res = Stars.sync()
     .then(() => {
-        const user = Stars.findOne({ where: { user_id: userID }, raw: true });
+        const user = Stars.findOne({ where: { username: name }, raw: true });
         return user;
     })
     .then(data => {
