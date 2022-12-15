@@ -12,11 +12,11 @@ module.exports = {
             if (starToday) {
                 await interaction.reply({ content: `Looks like you've already left a star today. Good job!`, ephemeral: true });
             } else {
-                await db.addStar(interaction.user.id);
+                await db.addStar(interaction.user.id, interaction.member.displayName);
                 await interaction.reply({ content: `<:star:1052274989216305243> Thank you for your star today! <:star:1052274989216305243>`, ephemeral: true});
             }
         } else {
-            await db.newUser(interaction.user.id);
+            await db.newUser(interaction.user.id, interaction.member.displayName);
             await interaction.reply({ content: `Hey there ${interaction.user}! Looks like it's your first time. Welcome! I have recorded your first star. If you need some clarity of the rules, feel free to use the \`/starhelp\` command for more info. Happy reading! <:books:1052807705544372244>` })
         }
     }

@@ -17,9 +17,13 @@ sequelize.authenticate()
     .catch(err => console.log("Error connecting to database.", err));
 
 const Stars = sequelize.define('stars', {
+    user_id: {
+        type: DataTypes.INTEGER,
+        unique: true
+    },
     username: {
         type: DataTypes.STRING,
-        unique: true,
+        allowNull: false
     },
     stars_count: {
         type: DataTypes.INTEGER,
@@ -33,18 +37,18 @@ const Stars = sequelize.define('stars', {
     },
     last_star: DataTypes.STRING
 });
-
 Stars.sync();
 
 /**
- * Adds a star for the user
- * @param {String} name 
- * @param {Boolean} onTime
+ * Adds a star for the user.
+ * It will also update the database if the user changed their nickname
+ * @param {Integer} userID
+ * @param {String} name Just in case the user changes their name
  */
-const addStar = async (name) => {
+const addStar = async (userID, name) => {
     Stars.sync()
     .then(() => {
-        const user = Stars.findOne({ where: { username: name }, raw: true });
+        const user = Stars.findOne({ where: { user_id: userID }, raw: true });
         return user;
     })
     .then(data => {
@@ -52,7 +56,6 @@ const addStar = async (name) => {
         let date = new Date(data.last_star);
         let currStars = data.stars_count;
         let currStreak = data.highest_streak;
-
         if ((currDate.getDate() - 2) < date.getDate()) {
             currStars = currStars + 1;
         }
@@ -61,20 +64,20 @@ const addStar = async (name) => {
         if (currStars > currStreak)
             currStreak = currStars;
         
-        Stars.update({ stars_count: currStars, last_star: currDate.toString(), highest_streak: currStreak }, { where: { username: name } });
+        Stars.update({ username: name, stars_count: currStars, last_star: currDate.toString(), highest_streak: currStreak }, { where: { user_id: userID } });
     })
     .catch(err => console.error("Error", err));
 };
 
 /**
  * Returns true or false
- * @param {String} name
+ * @param {String} userID
  * @returns Boolean
  */
-const checkUser = async (name) => {
+const checkUser = async (userID) => {
     let res = Stars.sync()
     .then(() => {
-        const user = Stars.findOne({ where: { username: name }, raw: true });
+        const user = Stars.findOne({ where: { user_id: userID }, raw: true });
         return user;
     })
     .then(data => {
@@ -83,26 +86,28 @@ const checkUser = async (name) => {
     });
     return res;
 }
+
 /**
  * Adds new user
+ * @param {Integer} userID
  * @param {String} name 
  */
-const newUser = async (name) => {
+const newUser = async (userID, name) => {
     let currDate = new Date();
     Stars.sync()
-    .then(() => Stars.create({ username: name.toString(), last_star: currDate.toString() }) )
+    .then(() => Stars.create({ user_id: userID, username: name.toString(), last_star: currDate.toString() }) )
     .catch(err => console.error(err));
 }
 
 /**
  * Checks to see if user already left star on the same day.
- * @param {String} name
+ * @param {String} userID
  * @returns Boolean
  */
-const checkStar = async (name) => {
+const checkStar = async (userID) => {
     let res = Stars.sync()
     .then(() => {
-        const user = Stars.findOne({ where: { username: name }, raw: true });
+        const user = Stars.findOne({ where: { user_id: userID }, raw: true });
         return user;
     })
     .then(data => {
