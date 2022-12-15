@@ -5,7 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('star')
         .setDescription('Leave your star for your streak in the library!'),
-        async execute(interaction) {
+    async execute(interaction) {
         let currUser = await db.checkUser(interaction.user.id);
         if (currUser) {
             let starToday = await db.checkStar(interaction.user.id);
