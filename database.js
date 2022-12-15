@@ -1,6 +1,6 @@
-// TODO Make special greetings if user is checking in for the first time (maybe add method to check first then return true or false)
+// TODO For /starstreaks SELECT * FROM stars and jsonify it with .toJSON()
 // TODO Find way to send ping to every user everyday (who is participating)
-// TODO Account for month change
+// TODO Account for month change (see if there's some sort of way to calculate days)
 const { Sequelize, DataTypes } = require('sequelize');
 const dotenv = require('dotenv');
 dotenv.config();
