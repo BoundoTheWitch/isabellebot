@@ -76,7 +76,7 @@ client.on('interactionCreate', async interaction => {
 // Edited messages
 client.on('messageUpdate', async (msg, newMsg) => {
     try {
-        const logchannel = client.channels.cache.find(ch => ch.name === "event-logs");
+        const logchannel = client.channels.cache.find(ch => ch.name === "event-logs" && ch.guild.id === process.env.SERVER.toString());
         if (msg.author.id === client.user.id) {
             return;
         } else {
@@ -103,7 +103,7 @@ client.on("messageDelete", msg => {
         if (msg.author.id === client.user.id) {
             return;
         } else {
-            const logchannel = client.channels.cache.find(ch => ch.name === "event-logs");
+            const logchannel = client.channels.cache.find(ch => ch.name === "event-logs" && ch.guild.id === process.env.SERVER.toString());
             const embed = new EmbedBuilder()
                 .setColor(0xf16363)
                 .setTitle("Message was deleted")
