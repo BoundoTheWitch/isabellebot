@@ -131,7 +131,7 @@ const getStars = async () => {
     let dbStars = await Stars.findAll({ attributes: ['username', 'stars_count', 'highest_streak'] });
     let starsUsers = dbStars.map(e => {
         let str;
-        str = `${(e.username).padEnd(32, ' ')} --- ${(e.stars_count).toString().padStart(1, ' ').padEnd(1, ' ')} --- ${(e.highest_streak).toString().padStart(1, ' ')}\n`;
+        str = `**${e.username}**\n---Current stars: ${e.stars_count}\n---Highest streak: ${e.highest_streak}\n`;
         return str;
     }).join('');
     return starsUsers;
