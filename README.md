@@ -16,8 +16,8 @@ It's been a while, the Discord API has changed a lot, and I have a strong urge t
     - [x] Track when user leaves their star
         - [x] Set up database
     - [x] Find way to show progress (streaks, highest streak per user, etc)
-        - [ ] Add flashier way to show leaderboard (possibly with `@napi-rs/canvas`)
-    - [ ] Add reminder for users to post their stars (optional)
+        - [ ] (optional) Add flashier way to show leaderboard (possibly with `@napi-rs/canvas`)
+    - [x] Add reminder for users to post their stars (optional)
     - [x] ~~Find way to allow a user to post a star from previous day if they forget~~ (might be too difficult)
 - [ ] Set up machine to host Isabelle Bot on
 - [ ] Deploy Isabelle Bot back to the wild
