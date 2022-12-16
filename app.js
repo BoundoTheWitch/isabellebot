@@ -5,6 +5,8 @@ dotenv.config();
 const fs = require('node:fs');
 const path = require('path');
 
+const cron = require('node-cron');
+
 // Discord.js
 const { Client, GatewayIntentBits, Collection, ActivityType, EmbedBuilder } = require('discord.js');
 const client = new Client({
@@ -17,6 +19,7 @@ const client = new Client({
     ]
 });
 client.commands = new Collection();
+
 
 // Populating commands
 const commandsPath = path.join(__dirname, 'commands');
@@ -39,10 +42,14 @@ fs.writeFile('./commands/list.json', JSON.stringify(list), (err) => {
     if (err) return console.error(err);
 });
 
+// Grab channel IDs
+let channelLibrary;
+
 // On startup
 client.on('ready', () => {
     client.user.setActivity('the mayor', { type: ActivityType.Listening });
     console.log(`${client.user.tag} online.`);
+    channelLibrary = client.channels.cache.find(ch => ch.name === "the-library");
 });
 
 // Message posted
@@ -109,5 +116,13 @@ client.on("messageDelete", msg => {
         console.log(err);
     }
 })
+
+// Cron job to send reminder to everyone about posting their stars at 00:00 (system time)
+cron.schedule('0 0 0 * * *', () => {
+    channelLibrary.send("Reminder");
+});
+
+
+
 
 client.login(process.env.TOKEN);
