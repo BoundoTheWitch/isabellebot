@@ -35,7 +35,7 @@ const Stars = sequelize.define('stars', {
         defaultValue: 1,
         allowNull: false
     },
-    last_star: DataTypes.STRING
+    last_star: DataTypes.STRING,
 });
 Stars.sync();
 
@@ -125,10 +125,16 @@ const checkStar = async (userID) => {
 
 /**
  * Get every user and their stars and return it as an array
- * Similar to SELECT * FROM stars
+ * Similar to SELECT * FROM stars WHERE (attributes here)
  */
 const getStars = async () => {
-    // TODO Get username, stars_count, highest_streak
+    let dbStars = await Stars.findAll({ attributes: ['username', 'stars_count', 'highest_streak'] });
+    let starsUsers = dbStars.map(e => {
+        let str;
+        str = `${(e.username).padEnd(32, ' ')} --- ${(e.stars_count).toString().padStart(1, ' ').padEnd(1, ' ')} --- ${(e.highest_streak).toString().padStart(1, ' ')}\n`;
+        return str;
+    }).join('');
+    return starsUsers;
 }
 
 /**
