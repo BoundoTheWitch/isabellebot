@@ -49,7 +49,7 @@ let channelLibrary;
 client.on('ready', () => {
     client.user.setActivity('the mayor', { type: ActivityType.Listening });
     console.log(`${client.user.tag} online.`);
-    channelLibrary = client.channels.cache.find(ch => ch.name === "the-library");
+    channelLibrary = client.channels.cache.find(ch => ch.name === "the-library" && ch.guild.id === process.env.SERVER.toString());
 });
 
 // Message posted
