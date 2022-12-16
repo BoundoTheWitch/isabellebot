@@ -8,7 +8,7 @@ const path = require('path');
 const cron = require('node-cron');
 
 // Discord.js
-const { Client, GatewayIntentBits, Collection, ActivityType, EmbedBuilder } = require('discord.js');
+const { Client, GatewayIntentBits, Collection, ActivityType, EmbedBuilder, MessageManager } = require('discord.js');
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -49,7 +49,7 @@ let channelLibrary;
 client.on('ready', () => {
     client.user.setActivity('the mayor', { type: ActivityType.Listening });
     console.log(`${client.user.tag} online.`);
-    channelLibrary = client.channels.cache.find(ch => ch.name === "the-library" && ch.guild.id === process.env.SERVER.toString());
+    channelLibrary = client.channels.cache.find(ch => ch.name === "the-library" && ch.guild.id === process.env.SERVER.toString());    
 });
 
 // Message posted
@@ -118,7 +118,12 @@ client.on("messageDelete", msg => {
 })
 
 // Cron job to send reminder to everyone about posting their stars at 00:00 (system time)
-cron.schedule('0 0 0 * * *', () => {
+cron.schedule('0 0 0 * * *', () => {    
+    let lastPost;
+    if (fs.existsSync('./lastpost.txt')) {
+        lastPost = fs.readFileSync('./lastpost.txt', 'utf8');
+        channelLibrary.messages.fetch(lastPost).then(msg => msg.delete());
+    }
     let ranQuote = [
         "The clock strikes midnight, which can only mean that it's the start of a new day!",
         "Do you hear that? Just me? Well then that means it must be midnight, which means it's a new day!",
@@ -130,10 +135,11 @@ cron.schedule('0 0 0 * * *', () => {
         "...oh, sorry, I was too busy reading. Speaking of which, it's a new day!",
     ];
     let ranNum = Math.floor(Math.random() * ranQuote.length);
-    channelLibrary.send(`${ranQuote[ranNum]} Don't forget to leave your star later if you have done your reading.`);
+    channelLibrary.send(`${ranQuote[ranNum]} Don't forget to leave your star later if you have done your reading.`).then(message => {
+        fs.writeFile('./lastpost.txt', message.id, (err) => {
+            if (err) return console.error(err);
+        });
+    });
 });
-
-
-
 
 client.login(process.env.TOKEN);
