@@ -9,8 +9,8 @@ module.exports = {
         const stars = await db.getStars();
         const embed = new EmbedBuilder()
             .setColor(0xd8cd2d)
-            .setTitle(`Stars Streak Leadboard`)
-            .setDescription(`NAME --- CURRENT STARS --- HIGHEST STREAK\n${stars}`);
+            .setTitle(`<:stars:1053218314211557456> Stars Streak Leadboard <:stars:1053218314211557456>`)
+            .setDescription(`${stars}`);
         await interaction.reply({ embeds: [embed], ephemeral: true });
     }
 };
