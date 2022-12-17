@@ -184,4 +184,4 @@ const getAll = async () => {
     .catch(err => console.error(err));
 }
 
-module.exports = { newUser, addStar, checkUser, checkStar, getStars, clearDB, manualEntry, why };
+module.exports = { newUser, addStar, checkUser, checkStar, getStars, clearDB, manualEntry, getAll };
