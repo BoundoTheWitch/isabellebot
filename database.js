@@ -18,7 +18,7 @@ sequelize.authenticate()
 
 const Stars = sequelize.define('stars', {
     user_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         unique: true
     },
     username: {
@@ -71,7 +71,7 @@ const addStar = async (userID, name) => {
 
 /**
  * Returns true or false
- * @param {String} userID
+ * @param {Integer} userID
  * @returns Boolean
  */
 const checkUser = async (userID) => {
@@ -101,7 +101,7 @@ const newUser = async (userID, name) => {
 
 /**
  * Checks to see if user already left star on the same day.
- * @param {String} userID
+ * @param {Integer} userID
  * @returns Boolean
  */
 const checkStar = async (userID) => {
@@ -148,4 +148,40 @@ const clearDB = (pass) => {
         console.error("That's not the password, dummy!");
     }
 }
-module.exports = { newUser, addStar, checkUser, checkStar, getStars, clearDB };
+
+/**
+ * FOR INTERNAL USER ONLY. Manually enter data just in case
+ * @param {String} userID
+ * @param {String} username
+ * @param {Integer} stars 
+ * @param {Integer} streak 
+ * @param {String} date
+ * @param {String} pass
+ */
+const manualEntry = async (userID, username, stars, streak, date, pass) => {
+    if (pass === process.env.DBPASS) {
+        Stars.sync()
+        .then(() => {
+            Stars.create({ user_id: userID, username: username, stars_count: stars, highest_streak: streak, last_star: date });
+        })
+        .catch(err => console.error("Error", err));
+    } else console.log("Wrong password.");
+}
+
+/**
+ * Console log everything from the database
+ */
+const getAll = async () => {
+    Stars.sync()
+    .then(() => {
+        return Stars.findAll({ raw: true });
+    })
+    .then(data => {
+        data.map((e) => {
+            console.log(`'${e.user_id}', '${e.username}', ${e.stars_count}, ${e.highest_streak}, '${e.last_star}'`);
+        })
+    })
+    .catch(err => console.error(err));
+}
+
+module.exports = { newUser, addStar, checkUser, checkStar, getStars, clearDB, manualEntry, why };
