@@ -117,29 +117,33 @@ client.on("messageDelete", msg => {
     }
 })
 
-// Cron job to send reminder to everyone about posting their stars at 00:00 (system time)
-cron.schedule('0 0 0 * * *', () => {    
+let quoteCounter = -1;
+let ranQuote = [
+    "Hello everyone! It's the start of a new day.",
+    "Hello everyone! Not to be a pest, but it's a new day!",
+    "Greetings fellow reading pals, it's a new day!",
+    "It's a whole new day!",
+    "It's a random quote! I don't think I was supposed to read that. It's a new day!",
+    "...oh, sorry, I was too busy reading. Speaking of which, it's a new day!",
+];
+ranQuote.sort(() => Math.random() - 0.5);
+// Cron job to send reminder to everyone about posting their stars at 06:00:00 (system time)
+cron.schedule('0 0 6 * * *', () => {
     let lastPost;
     if (fs.existsSync('./lastpost.txt')) {
         lastPost = fs.readFileSync('./lastpost.txt', 'utf8');
         channelLibrary.messages.fetch(lastPost).then(msg => msg.delete());
     }
-    let ranQuote = [
-        "The clock strikes midnight, which can only mean that it's the start of a new day!",
-        "Do you hear that? Just me? Well then that means it must be midnight, which means it's a new day!",
-        "Hello everyone! Not to be a pest, but it's a new day!",
-        "Greetings fellow reading pals, it's a new day!",
-        "It's a whole new day!",
-        "It's a random quote...I don't think I was supposed to read that. It's a new day!",
-        "Ding ding, it's midnight. Which means it's the start of a new day!",
-        "...oh, sorry, I was too busy reading. Speaking of which, it's a new day!",
-    ];
-    let ranNum = Math.floor(Math.random() * ranQuote.length);
-    channelLibrary.send(`${ranQuote[ranNum]} Don't forget to leave your star later if you have done your reading.`).then(message => {
+    if (quoteCounter > ranQuote.length - 2) {
+        ranQuote.sort(() => Math.random() - 0.5);
+        quoteCounter = -1;
+    }
+    quoteCounter++;
+    channelLibrary.send(`${ranQuote[quoteCounter]} Don't forget to leave your star later if you have done your reading.`).then(message => {
         fs.writeFile('./lastpost.txt', message.id, (err) => {
             if (err) return console.error(err);
         });
-    });
+    })
 });
 
 client.login(process.env.TOKEN);

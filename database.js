@@ -150,7 +150,7 @@ const clearDB = (pass) => {
 }
 
 /**
- * FOR INTERNAL USER ONLY. Manually enter data just in case
+ * FOR INTERNAL USE ONLY. Manually enter data just in case
  * @param {String} userID
  * @param {String} username
  * @param {Integer} stars 
