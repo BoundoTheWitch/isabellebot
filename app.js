@@ -1,4 +1,4 @@
-const urlFilter = require('./urlFilter');
+const util = require('./util');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -86,8 +86,8 @@ client.on('messageUpdate', async (msg, newMsg) => {
                 const embed = new EmbedBuilder()
                     .setColor(0x4781f0)
                     .setTitle("Message was edited")
-                    .addFields({ name: "Old message", value: urlFilter(msg.content) })
-                    .addFields({ name: "New message", value: urlFilter(newMsg.content) })
+                    .addFields({ name: "Old message", value: util.urlFilter(msg.content) })
+                    .addFields({ name: "New message", value: util.urlFilter(newMsg.content) })
                     .setFooter({ text: "From #" + msg.channel.name + "\nBy " + msg.author.username });
                 logchannel.send({ embeds: [embed] });
             }
@@ -107,7 +107,7 @@ client.on("messageDelete", msg => {
             const embed = new EmbedBuilder()
                 .setColor(0xf16363)
                 .setTitle("Message was deleted")
-                .addFields({ name: "Message", value: urlFilter(msg.content) })
+                .addFields({ name: "Message", value: util.urlFilter(msg.content) })
                 .setFooter({ text: "From #" + msg.channel.name + "\nBy " + msg.author.username })
         
             logchannel.send({ embeds: [embed] });
