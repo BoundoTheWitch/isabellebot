@@ -20,7 +20,7 @@ const urlFilter = (str) => {
  * Returns time in 12-hour format (ex: 01:15am, 11:22pm)
  * @returns String (hh:mm am|pm)
  */
-const currentDate = () => {
+const currentTime = () => {
     let date = new Date();
     let hour = ((date.getHours() > 12) ? date.getHours() - 12 : date.getHours()).toString().padStart(2, '0');
     let mins = (date.getMinutes().toString().padStart(2, '0')).toString().padStart(2, '0');
@@ -30,4 +30,4 @@ const currentDate = () => {
 }
 
 
-module.exports = { urlFilter, currentDate }
+module.exports = { urlFilter, currentTime }
