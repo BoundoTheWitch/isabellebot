@@ -113,7 +113,7 @@ const checkStar = async (userID) => {
     .then(data => {
         let currDate = new Date();
         let date = new Date(data.last_star);
-        if (date.getDate() === currDate.getDate() && currDate.getHours() < 6) {
+        if (date.getDate() === currDate.getDate()) {
             return true;
         } else {
             return false;
