@@ -3,7 +3,7 @@
  * adds a backtick(`) symbol around the URL
  * @param {String} str String to parse
  */
-module.exports = (str) => {
+const urlFilter = (str) => {
     if (str.length < 1)
         return '(may just be an image or empty...somehow)';
     else {
@@ -15,3 +15,19 @@ module.exports = (str) => {
         return newStr;
     }
 }
+
+/**
+ * Returns time in 12-hour format (ex: 01:15am, 11:22pm)
+ * @returns String (hh:mm am|pm)
+ */
+const currentDate = () => {
+    let date = new Date();
+    let hour = ((date.getHours() > 12) ? date.getHours() - 12 : date.getHours()).toString().padStart(2, '0');
+    let mins = (date.getMinutes().toString().padStart(2, '0')).toString().padStart(2, '0');
+    let ampm = (date.getHours() < 11) ? 'am' : 'pm';
+
+    return `${hour}:${mins}${ampm}`;
+}
+
+
+module.exports = { urlFilter, currentDate }
