@@ -42,7 +42,7 @@ Stars.sync();
 /**
  * Adds a star for the user.
  * It will also update the database if the user changed their nickname
- * @param {Integer} userID
+ * @param {String} userID
  * @param {String} name Just in case the user changes their name
  */
 const addStar = async (userID, name) => {
@@ -53,14 +53,16 @@ const addStar = async (userID, name) => {
     })
     .then(data => {
         let currDate = new Date();
-        let date = new Date(data.last_star);
+        let dbDate = new Date(data.last_star);
         let currStars = data.stars_count;
         let currStreak = data.highest_streak;
-        if ((currDate.getDate() - 2) < date.getDate()) {
+        if ((currDate.getDate() - 2) < dbDate.getDate()) {
             currStars = currStars + 1;
         }
-        else
+        else {
             currStars = 1;
+        }
+        
         if (currStars > currStreak)
             currStreak = currStars;
         
@@ -70,8 +72,8 @@ const addStar = async (userID, name) => {
 };
 
 /**
- * Returns true or false
- * @param {Integer} userID
+ * Returns true or false if a user exists
+ * @param {String} userID
  * @returns Boolean
  */
 const checkUser = async (userID) => {
@@ -89,7 +91,7 @@ const checkUser = async (userID) => {
 
 /**
  * Adds new user
- * @param {Integer} userID
+ * @param {String} userID
  * @param {String} name 
  */
 const newUser = async (userID, name) => {
@@ -101,8 +103,9 @@ const newUser = async (userID, name) => {
 
 /**
  * Checks to see if user already left star on the same day.
- * @param {Integer} userID
- * @returns Boolean
+ * Returns true if the user has left their star for the day
+ * @param {String} userID
+ * @returns Boolean.
  */
 const checkStar = async (userID) => {
     let res = Stars.sync()
@@ -112,11 +115,15 @@ const checkStar = async (userID) => {
     })
     .then(data => {
         let currDate = new Date();
-        let date = new Date(data.last_star);
-        if (date.getDate() === currDate.getDate()) {
+        let dbDate = new Date(data.last_star);
+
+        if (dbDate.getDate() === currDate.getDate()) // Is it on the same day?
             return true;
-        } else {
-            return false;
+        else {
+            if (((dbDate.getDate() + 1) === currDate.getDate()) && (currDate.getHours() < 6))
+                return true;
+            else // After 6am
+                return false;
         }
     })
     .catch(err => console.error("Error", err));
