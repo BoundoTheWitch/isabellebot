@@ -184,4 +184,17 @@ const getAll = async () => {
     .catch(err => console.error(err));
 }
 
-module.exports = { newUser, addStar, checkUser, checkStar, getStars, clearDB, manualEntry, getAll };
+/**
+ * FOR INTERNAL USE Manually update star count
+ * @param {String} id 
+ * @param {Integer} count 
+ */
+const changeStar = async(id, count) => {
+    Stars.sync()
+    .then(() => {
+        Stars.update('262752361959784458', 6);
+    })
+    .catch(err => console.error(err));
+}
+
+module.exports = { newUser, addStar, checkUser, checkStar, getStars, clearDB, manualEntry, getAll, changeStar };
