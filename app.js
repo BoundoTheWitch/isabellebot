@@ -76,11 +76,13 @@ client.on('interactionCreate', async interaction => {
 // Edited messages
 client.on('messageUpdate', async (msg, newMsg) => {
     try {
+        let _msg = await msg.toString();
+        let _newMsg = await newMsg.toString();
         const logchannel = client.channels.cache.find(ch => ch.name === "event-logs" && ch.guild.id === process.env.SERVER.toString());
         if (msg.author.id === client.user.id) {
             return;
         } else {
-            if (msg.content === msg.newMsg) {
+            if (_msg === _newMsg) {
                 return;
             } else {
                 const embed = new EmbedBuilder()
@@ -89,7 +91,7 @@ client.on('messageUpdate', async (msg, newMsg) => {
                     .addFields({ name: "Old message", value: util.urlFilter(msg.content) })
                     .addFields({ name: "New message", value: util.urlFilter(newMsg.content) })
                     .setFooter({ text: "From #" + msg.channel.name + "\nBy " + msg.author.username });
-                logchannel.send({ embeds: [embed] });
+                await logchannel.send({ embeds: [embed] });
             }
         }
     } catch (err) {
