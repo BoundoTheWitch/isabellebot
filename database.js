@@ -192,7 +192,7 @@ const getAll = async () => {
 const changeStar = async(id, count) => {
     Stars.sync()
     .then(() => {
-        Stars.update('262752361959784458', 6);
+        Stars.update({ stars_count: count }, { where: { user_id: id } });
     })
     .catch(err => console.error(err));
 }
