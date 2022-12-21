@@ -5,6 +5,7 @@ module.exports = {
         .setName('caw')
         .setDescription('A corvid-based call.'),
     async execute(interaction) {
-        await interaction.reply('Caw caw, baby! <:caw:1054974119285899334>');
+        const caw = interaction.guild.emojis.cache.find(e => e.name === "caw");
+        await interaction.reply(`Caw caw, baby! ${caw}`);
     }
 };
