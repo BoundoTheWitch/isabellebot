@@ -5,6 +5,6 @@ module.exports = {
         .setName('caw')
         .setDescription('A corvid-based call.'),
     async execute(interaction) {
-        await interaction.reply('Caw caw, baby! (crow emote)')
+        await interaction.reply('Caw caw, baby! <:caw:1054974119285899334>');
     }
 };

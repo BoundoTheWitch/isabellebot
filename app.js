@@ -71,7 +71,6 @@ client.on('interactionCreate', async interaction => {
     }
 });
 
-// TODO Move events to seperate files to clean up
 
 // Edited messages
 client.on('messageUpdate', async (msg, newMsg) => {
