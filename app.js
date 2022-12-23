@@ -128,8 +128,7 @@ let ranQuote = [
 ];
 ranQuote.sort(() => Math.random() - 0.5);
 // Cron job to send reminder to everyone about posting their stars at 06:00:00 (system time)
-// cron.schedule('0 0 6 * * *', async () => {
-cron.schedule('0 29 0 * * *', async () => {
+cron.schedule('0 0 6 * * *', async () => {
     const stars = await db.getStars();
     const embed = new EmbedBuilder()
         .setColor(0xf2cf74)
