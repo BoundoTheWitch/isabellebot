@@ -1,7 +1,5 @@
-// TODO For /starstreaks SELECT * FROM stars and jsonify it with .toJSON()
-// TODO Find way to send ping to every user everyday (who is participating)
-// TODO Account for month change (see if there's some sort of way to calculate days)
 const { Sequelize, DataTypes } = require('sequelize');
+const prompt = require('prompt-sync')({ sigint: true });
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -131,14 +129,16 @@ const checkStar = async (userID) => {
 }
 
 /**
- * Get every user and their stars and return it as an array
+ * Get every user and their stars
  * Similar to SELECT * FROM stars WHERE (attributes here)
  */
 const getStars = async () => {
-    let dbStars = await Stars.findAll({ attributes: ['username', 'stars_count', 'highest_streak'] });
+    let dbStars = await Stars.findAll({ attributes: ['username', 'stars_count', 'highest_streak', 'last_star'], order: [['updatedAt', 'DESC']] });
     let starsUsers = dbStars.map(e => {
         let str;
-        str = `**${e.username}**\n---Current stars: ${e.stars_count}\n---Highest streak: ${e.highest_streak}\n`;
+        let dbDate = new Date(e.last_star);
+        let dbDateFormat = dbDate.toLocaleString('en-US', { hour12: true });
+        str = `**${e.username}** | ${e.stars_count}/${e.highest_streak}\n**Last Star:** ${dbDateFormat}\n\n`;
         return str;
     }).join('');
     return starsUsers;
@@ -203,5 +203,6 @@ const changeStar = async(id, count) => {
     })
     .catch(err => console.error(err));
 }
+
 
 module.exports = { newUser, addStar, checkUser, checkStar, getStars, clearDB, manualEntry, getAll, changeStar };
