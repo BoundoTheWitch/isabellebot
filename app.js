@@ -129,23 +129,33 @@ let ranQuote = [
 ranQuote.sort(() => Math.random() - 0.5);
 // Cron job to send reminder to everyone about posting their stars at 06:00:00 (system time)
 cron.schedule('0 0 6 * * *', async () => {
+    let quote;
+    let lastPost;
     const stars = await db.getStars();
     const embed = new EmbedBuilder()
         .setColor(0xf2cf74)
         .setTitle(`<:stars:1053218314211557456> Star Streak Leader Board <:stars:1053218314211557456>`)
         .setDescription(`${stars}`);
     
-    let lastPost;
     if (fs.existsSync('./lastpost.txt')) {
         lastPost = fs.readFileSync('./lastpost.txt', 'utf8');
         channelLibrary.messages.fetch(lastPost).then(msg => msg.delete());
     }
-    if (quoteCounter > ranQuote.length - 2) {
-        ranQuote.sort(() => Math.random() - 0.5);
-        quoteCounter = -1;
+
+    // I wish I thought ahead about implementing this. Will improve later.
+    let date = new Date();
+    if (date.getDate() === 1 && date.getMonth() === 0) {
+        quote = "Happy New Year everyone! Here's to another year of good reads."
     }
-    quoteCounter++;
-    channelLibrary.send({ content: `${ranQuote[quoteCounter]} Don't forget to leave your star later if you have done your reading.`, embeds: [embed] }).then(message => {
+    else {
+        if (quoteCounter > ranQuote.length - 2) {
+            ranQuote.sort(() => Math.random() - 0.5);
+            quoteCounter = -1;
+        }
+        quoteCounter++;
+        quote = ranQuote[quoteCounter];
+    }
+    channelLibrary.send({ content: `${quote} Don't forget to leave your star later if you have done your reading.`, embeds: [embed] }).then(message => {
         fs.writeFile('./lastpost.txt', message.id, (err) => {
             if (err) return console.error(err);
         });
