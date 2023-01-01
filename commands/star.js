@@ -14,7 +14,7 @@ module.exports = {
                 await interaction.reply({ content: `Looks like you've already left a star today. Good job!\n(Start of a new day starts at \`6am\`. It's currently \`${currentTime()}\`)`, ephemeral: true });
             } else {
                 await db.addStar(interaction.user.id, interaction.member.displayName);
-                await interaction.reply({ content: `<:star:1052274989216305243> Thank you for your star today! <:star:1052274989216305243>`, ephemeral: true});
+                await interaction.reply({ content: `<:star:1052274989216305243> Thank you for your star today! <:star:1052274989216305243>` });
             }
         } else {
             await db.newUser(interaction.user.id, interaction.member.displayName);
