@@ -134,7 +134,7 @@ cron.schedule('0 0 6 * * *', async () => {
     const stars = await db.getStars();
     const embed = new EmbedBuilder()
         .setColor(0xf2cf74)
-        .setTitle(`<:stars:1053218314211557456> Star Streak Leader Board <:stars:1053218314211557456>`)
+        .setTitle(`<:stars:1053218314211557456> Stars Streak Leader Board <:stars:1053218314211557456>`)
         .setDescription(`${stars}`);
     
     if (fs.existsSync('./lastpost.txt')) {
