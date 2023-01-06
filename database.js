@@ -193,16 +193,16 @@ const getAll = async () => {
 
 /**
  * FOR INTERNAL USE Manually update star count
- * @param {String} id 
- * @param {Integer} count 
+ * @param {String} id ID of the user
+ * @param {Integer} currStars Current number of stars
+ * @param {Integer} currStreak Highest streak
  */
-const changeStar = async(id, count) => {
+const changeStar = async(id, currStars, currStreak) => {
     Stars.sync()
     .then(() => {
-        Stars.update({ stars_count: count }, { where: { user_id: id } });
+        Stars.update({ stars_count: currStars, highest_streak: currStreak }, { where: { user_id: id } });
     })
     .catch(err => console.error(err));
 }
-
 
 module.exports = { newUser, addStar, checkUser, checkStar, getStars, clearDB, manualEntry, getAll, changeStar };
