@@ -1,25 +1,8 @@
 # Isabelle Bot
 ## v3
 
-It's been a while, the Discord API has changed a lot, and I have a strong urge to try and do programming again. Let's tackle it slowly, piece by piece.
+Isabelle Bot is a Discord bot powered by [Discord.js](https://discord.js.org). It started out as a small project to replicate some of the fun commands from a Twitch channel I moderate for in her Discord server. After a while, more complexity was added, such as commands that had more interaction and even did a little bit of moderation such as banning users and auditing edited and deleted messages. With some of the major changes that came with Discord's own API and getting more free time in my personal life Isabelle Bot is being re-worked.
 
-# TODO
-- [x] Bring her back online (or at least the test bot)
-- [x] Basic functionality and then some
-    - [x] Bring back simple commands (/hug and /caw)
-- [x] Add /help to list commands
-- [x] Logs in logs channel
-    - [x] Log edited and deleted posts
-    - [x] Safely show edited and deleted posts that contain a link (for safety don't allow it to keep the link clickable)
-    - [x] For images make it only show `There was an image` as to not save the image in case someone uploads something embarrassing
-- [x] Reading challenge stuff
-    - [x] Track when user leaves their star
-        - [x] Set up database
-    - [x] Find way to show progress (streaks, highest streak per user, etc)
-    - [x] Add reminder for users to post their stars (optional)
-    - [x] ~~Find way to allow a user to post a star from previous day if they forget~~ (might be too difficult)
-- [x] Set up machine to host Isabelle Bot on
-- [x] Deploy Isabelle Bot back to the wild
-- [ ] Update README so it's a bit more descriptive
-- [ ] ~~Dadbot~~
-    - [ ] ~~Practice dark arts to reanimate Dadbot once again so he can rule the lands~~
+Currently the bot only does simple commands, helps run the community's own reading challenges by tracking user's progress, and audits edited and deleted messages.
+
+I continue to update and change Isabelle Bot to get more experience in developing Node.js applications and expanding my programming skills and knowhow along the way. As the community comes up with more features and requests I plan to add what I can.
