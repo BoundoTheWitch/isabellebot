@@ -104,7 +104,6 @@ const newUser = async (userID, name) => {
 
 /**
  * Checks to see if user already left star on the same day.
- * Returns string ("SAMEDAY", "GOOD", "LATE")
  * @param {String} userID
  * @returns "SAMEDAY" | "GOOD" | "LATE"
  */
