@@ -1,1 +1,0 @@
-This folder is left here for historic reasons to showcase some of the older shenanigans that used to happen. This will be deleted in the next few revisions.
