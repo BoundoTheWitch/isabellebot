@@ -34,8 +34,13 @@ const Stars = sequelize.define('stars', {
         allowNull: false
     },
     last_star: DataTypes.STRING,
+    star_placed: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+        allowNull: false
+    },
 });
-Stars.sync();
+Stars.sync({ alter: true });
 
 /**
  * Adds a star for the user.
@@ -43,30 +48,28 @@ Stars.sync();
  * @param {String} userID
  * @param {String} name Just in case the user changes their name
  */
-const addStar = async (userID, name) => {
+const addStar = async (userID, name, status) => {
     Stars.sync()
-    .then(() => {
-        const user = Stars.findOne({ where: { user_id: userID }, raw: true });
-        return user;
-    })
-    .then(data => {
-        let currDate = new Date();
-        let dbDate = new Date(data.last_star);
-        let currStars = data.stars_count;
-        let currStreak = data.highest_streak;
-        if ((currDate.getDate() - 2) < dbDate.getDate()) {
-            currStars = currStars + 1;
-        }
-        else {
-            currStars = 1;
-        }
-        
-        if (currStars > currStreak)
-            currStreak = currStars;
-        
-        Stars.update({ username: name, stars_count: currStars, last_star: currDate.toString(), highest_streak: currStreak }, { where: { user_id: userID } });
-    })
-    .catch(err => console.error("Error", err));
+        .then(() => {
+            const user = Stars.findOne({ where: { user_id: userID }, raw: true });
+            return user;
+        })
+        .then(data => {
+            let currStars = data.stars_count;
+            let currStreak = data.highest_streak;
+            let currDate = new Date();
+            if (status === "GOOD")
+                currStars = currStars + 1;
+            else if (status === "LATE")
+                currStars = 1;
+
+            if (currStars > currStreak)
+                currStreak = currStars;
+
+            
+            Stars.update({ username: name, stars_count: currStars, last_star: currDate.toString(), highest_streak: currStreak, star_placed: 0 }, { where: { user_id: userID } });
+        })
+        .catch(err => console.error("Error", err));
 };
 
 /**
@@ -95,15 +98,15 @@ const checkUser = async (userID) => {
 const newUser = async (userID, name) => {
     let currDate = new Date();
     Stars.sync()
-    .then(() => Stars.create({ user_id: userID, username: name.toString(), last_star: currDate.toString() }) )
-    .catch(err => console.error(err));
+        .then(() => Stars.create({ user_id: userID, username: name.toString(), last_star: currDate.toString() }) )
+        .catch(err => console.error(err));
 }
 
 /**
  * Checks to see if user already left star on the same day.
- * Returns true if the user has left their star for the day
+ * Returns string ("SAMEDAY", "GOOD", "LATE")
  * @param {String} userID
- * @returns Boolean.
+ * @returns "SAMEDAY" | "GOOD" | "LATE"
  */
 const checkStar = async (userID) => {
     let res = Stars.sync()
@@ -112,17 +115,13 @@ const checkStar = async (userID) => {
         return user;
     })
     .then(data => {
-        let currDate = new Date();
-        let dbDate = new Date(data.last_star);
-
-        if (dbDate.getDate() === currDate.getDate()) // Is it on the same day?
-            return true;
-        else {
-            if (((dbDate.getDate() + 1) === currDate.getDate()) && (currDate.getHours() < 6))
-                return true;
-            else // After 6am
-                return false;
-        }
+        const status = data.star_placed;
+        if (status === 0)
+            return "SAMEDAY";
+        else if (status === 1)
+            return "GOOD";
+        else
+            return "LATE";
     })
     .catch(err => console.error("Error", err));
     return res;
@@ -145,16 +144,26 @@ const getStars = async () => {
 }
 
 /**
- * FOR INTERNAL USE ONLY. Clears out database.
- * @param {String} pass The password
+ * For cronjob. On start of a new day, increment star_placed value
  */
-const clearDB = (pass) => {
-    if (pass === process.env.DBPASS) {
-        sequelize.drop();
-    } else {
-        console.error("That's not the password, dummy!");
+const newDay = async () => {
+    const statements = [];
+    const stars = await Stars.findAll({ attributes: ['user_id', 'star_placed'], raw: true });
+
+    for (let i = 0; i < stars.length; i++) {
+        let newStarPlaced = (stars[i].star_placed < 2) ? stars[i].star_placed += 1 : 2;
+        statements.push(
+            sequelize.query(
+                `UPDATE Stars
+                SET star_placed=${newStarPlaced}
+                WHERE user_id=${stars[i].user_id};`
+            )
+        );
     }
+
+    const res = await Promise.all(statements);
 }
+
 
 /**
  * FOR INTERNAL USE ONLY. Manually enter data just in case
@@ -205,4 +214,4 @@ const changeStar = async(id, currStars, currStreak) => {
     .catch(err => console.error(err));
 }
 
-module.exports = { newUser, addStar, checkUser, checkStar, getStars, clearDB, manualEntry, getAll, changeStar };
+module.exports = { newUser, addStar, checkUser, checkStar, getStars, newDay, manualEntry, getAll, changeStar };

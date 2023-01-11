@@ -9,11 +9,11 @@ module.exports = {
     async execute(interaction) {
         let currUser = await db.checkUser(interaction.user.id);
         if (currUser) {
-            let starToday = await db.checkStar(interaction.user.id);
-            if (starToday) {
+            let status = await db.checkStar(interaction.user.id);
+            if (status === "SAMEDAY")
                 await interaction.reply({ content: `Looks like you've already left a star today. Good job!\n(Start of a new day starts at \`6am\`. It's currently \`${currentTime()}\`)`, ephemeral: true });
-            } else {
-                await db.addStar(interaction.user.id, interaction.member.displayName);
+            else {
+                await db.addStar(interaction.user.id, interaction.member.displayName, status);
                 await interaction.reply({ content: `<:star:1052274989216305243> Thank you for leaving your star today! <:star:1052274989216305243>` });
             }
         } else {
