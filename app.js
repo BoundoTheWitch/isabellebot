@@ -121,10 +121,18 @@ client.on("messageDelete", msg => {
 let quoteCounter = -1;
 let ranQuote = [
     "Hello everyone! It's the start of a new day.",
-    "Hello everyone! Not to be a pest, but it's a new day!",
     "Greetings fellow reading pals, it's a new day!",
     "It's a random quote! I don't think I was supposed to read that. It's a new day!",
     "...oh, sorry, I was too busy reading. Speaking of which, it's a new day!",
+    "What time is it? It's a new day!",
+    "...zzz...zzz...HUH WHAT? Oh, I almost slept in. New day!",
+    "No, I said DON'T do that.\nOh, I'm sorry, wrong chat.",
+    "Day? Yes...ish. New? Yes.",
+    "New day? New day.",
+    "Uhhhh...I can't think of anything clever to say. It's a new day! ⁽ʰᵉʸ ᵗʰᵃᵗ ʳʰʸᵐᵉˢᵎ⁾",
+    "HEYEVERYONEIT'SANEWDAYHELPIHADTOOMUCHCOFFEE!\n*shakes head*\n",
+    "Here comes the sun\n(Doo-d-doo-doo)\nHere comes the sun\nAnd I say,\"It's a new day!\"",
+    "They say the island is just a game. And everything we say? Or do? It's just to amuse somebody else!\n...I'm sorry, I don't know what came over me. It's a new day!",
 ];
 ranQuote.sort(() => Math.random() - 0.5);
 
@@ -150,7 +158,7 @@ cron.schedule('0 0 6 * * *', async () => {
     quoteCounter++;
     quote = ranQuote[quoteCounter];
     
-    channelLibrary.send({ content: `${quote} Don't forget to leave your star later if you have done your reading.`, embeds: [embed] }).then(message => {
+    channelLibrary.send({ content: `${quote}\nDon't forget to leave your star later if you have done your reading.`, embeds: [embed] }).then(message => {
         fs.writeFile('./lastpost.txt', message.id, (err) => {
             if (err) return console.error(err);
         });
