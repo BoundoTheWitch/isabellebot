@@ -1,7 +1,7 @@
 # Isabelle Bot
 ## v3
 
-Isabelle Bot is a Discord bot powered by [Discord.js](https://discord.js.org). It started out back in 2018 as a small project to replicate some of the fun commands from a Twitch channel I moderate for in her Discord server. After a while, more complexity was added, such as commands that had more interaction and even did a little bit of moderation such as banning users and auditing edited and deleted messages. With some of the major changes that came with Discord's own API and getting more free time in my personal life Isabelle Bot is being re-worked.
+Isabelle Bot is a Discord bot powered by [Discord.js](https://discord.js.org). It started out back in 2018 as a small project to replicate some of the fun commands from a Twitch channel I moderate for in her Discord server. After a while, more complexity was added, such as commands that had more interaction and even did a little bit of moderation such as banning users and auditing edited and deleted messages. With some of the major changes that came with Discord's own API and getting some free time in my personal life Isabelle Bot is being re-worked.
 
 I continue to update and change Isabelle Bot to get more experience in developing Node.js applications and expanding my programming skills and knowhow along the way. As the community comes up with more features and requests I plan to add what I can and update where needed.
 
@@ -23,6 +23,7 @@ Several memebers of the community came up with a challenge that helps encourage 
 * If you have done your reading then you leave a star.
 * Miss a day and you will lose your streak.
 * Only one star can be earned each day
+* Total number of stars are tracked so there's still a way to see reading progress
 
 Where Isabelle comes in is to help with tracking the stars. Originally a user was doing it all on their own updating a message to have a leaderboard on display. Isabelle helps with this.
 
@@ -30,3 +31,11 @@ Where Isabelle comes in is to help with tracking the stars. Originally a user wa
 * Isabelle updates a local database including what time someone leaves a star
 * Every day at 6am CST Isabelle will send a message to a specific channel reminding everyone that it's a new day and to leave their star. She also displays a leaderboard
 * If users wish to see a current leaderboard before the start of a new day they can with the `/starstreaks` command.
+
+## Workout stars
+
+On top of the reading challenges, another idea was sprung up where users are encouraged to workout often and earn stars through workouts. The rules are a bit different:
+
+* Workout (whatever is within your limits) for 30 minutes a day
+* Working out 4 times a week will earn you a super star
+* Mondays is the start of a new week and will reset super star chances if one was not obtained already.
