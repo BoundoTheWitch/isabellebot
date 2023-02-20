@@ -234,7 +234,7 @@ const getAll = async () => {
     })
     .then(data => {
         data.map((e) => {
-            console.log(`'${e.user_id}', '${e.username}', ${e.stars_count}, ${e.highest_streak}, '${e.last_star}'`);
+            console.log(`'${e.user_id}', '${e.username}', ${e.reading_count}, ${e.reading_streak}, ${e.reading_highest}, '${e.last_reading}', ${e.workout_count}, ${e.workout_streak}, ${e.workout_higest}, '${e.last_workout}'`);
         })
     })
     .catch(err => console.error(err));
