@@ -130,7 +130,7 @@ let ranQuote = [
     "Day? Yes...ish. New? Yes.",
     "New day? New day.",
     "Uhhhh...I can't think of anything clever to say. It's a new day! ⁽ʰᵉʸ ᵗʰᵃᵗ ʳʰʸᵐᵉˢᵎ⁾",
-    "HEYEVERYONEIT'SANEWDAYHELPIHADTOOMUCHCOFFEE!\n*shakes head*\n",
+    "HEYEVERYONEIT'SANEWDAYHELPIHADTOOMUCHCOFFEE\n*shakes head*\n",
     "Here comes the sun\n(Doo-d-doo-doo)\nHere comes the sun\nAnd I say,\"It's a new day!\"",
     "They say the island is just a game. And everything we say? Or do? It's just to amuse somebody else!\n...I'm sorry, I don't know what came over me. It's a new day!",
 ];
