@@ -23,22 +23,50 @@ const Stars = sequelize.define('stars', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    stars_count: {
+    // Reading stars
+    reading_count: {
         type: DataTypes.INTEGER,
         defaultValue: 1,
         allowNull: false
     },
-    highest_streak: {
+    reading_streak: {
         type: DataTypes.INTEGER,
         defaultValue: 1,
         allowNull: false
     },
-    last_star: DataTypes.STRING,
-    star_placed: {
+    reading_highest: {
+        type: DataTypes.INTEGER,
+        defaultValue: 1,
+        allowNull: false
+    },
+    last_reading: DataTypes.STRING,
+    reading_placed: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
         allowNull: false
     },
+    // Workout stars
+    workout_count: {
+        type: DataTypes.INTEGER,
+        defaultValue: 1,
+        allowNull: false
+    },
+    workout_streak: {
+        type: DataTypes.INTEGER,
+        defaultValue: 1,
+        allowNull: false
+    },
+    workout_higest: {
+        type: DataTypes.INTEGER,
+        defaultValue: 1,
+        allowNull: false
+    },
+    last_workout: DataTypes.STRING,
+    workout_placed: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+        allowNull: false
+    }
 });
 Stars.sync({ alter: true });
 
@@ -166,21 +194,34 @@ const newDay = async () => {
 
 /**
  * FOR INTERNAL USE ONLY. Manually enter data just in case
- * @param {String} userID
- * @param {String} username
- * @param {Integer} stars 
- * @param {Integer} streak 
- * @param {String} date
- * @param {String} pass
+ * @param {String} userID Discord ID
+ * @param {String} username Their display name (will get updated next time they leave a star)
+ * @param {Integer} readingStars Current stars in reading
+ * @param {Integer} readingStreak Current streak in reading
+ * @param {Integer} readingHighest Highest streak in reading
+ * @param {String} readingDate Date when they last left a reading star
+ * @param {Integer} workoutStars Current stars in workout
+ * @param {Integer} workoutStreak Current streak in workout
+ * @param {Integer} workoutHighest Highest streak in workout
+ * @param {String} workoutDate Date when they last left a workout star
  */
-const manualEntry = async (userID, username, stars, streak, date, pass) => {
-    if (pass === process.env.DBPASS) {
-        Stars.sync()
+const manualEntry = async (userID, username, readingStars, readingStreak, readingHighest, readingDate, workoutStars, workoutStreak, workoutHighest, workoutDate) => {
+    Stars.sync()
         .then(() => {
-            Stars.create({ user_id: userID, username: username, stars_count: stars, highest_streak: streak, last_star: date });
+            Stars.create({
+                user_id: userID,
+                username: username,
+                reading_count: readingStars,
+                reading_streak: readingStreak,
+                reading_highest: readingHighest,
+                last_reading: readingDate,
+                workout_count: workoutStars,
+                workout_streak: workoutStreak,
+                workout_higest: workoutHighest,
+                last_workout: workoutDate
+            });
         })
         .catch(err => console.error("Error", err));
-    } else console.log("Wrong password.");
 }
 
 /**
