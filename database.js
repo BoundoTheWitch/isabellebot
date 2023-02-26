@@ -70,64 +70,59 @@ const Stars = sequelize.define('stars', {
 });
 Stars.sync({ alter: true });
 
+
 /**
- * Adds a star for the user.
- * It will also update the database if the user changed their nickname
- * @param {String} userID
- * @param {String} name Just in case the user changes their name
+ * Check if user exists already
+ * @param {string} userID 
+ * @returns 
  */
-const addStar = async (userID, name, status) => {
-    Stars.sync()
+const checkUser = async (userID) => {
+    let res = Stars.sync()
         .then(() => {
             const user = Stars.findOne({ where: { user_id: userID }, raw: true });
             return user;
         })
         .then(data => {
-            let currStars = data.stars_count;
-            let currStreak = data.highest_streak;
-            let currDate = new Date();
-            if (status === "GOOD")
-                currStars = currStars + 1;
-            else if (status === "LATE")
-                currStars = 1;
-
-            if (currStars > currStreak)
-                currStreak = currStars;
-
-            
-            Stars.update({ username: name, stars_count: currStars, last_star: currDate.toString(), highest_streak: currStreak, star_placed: 0 }, { where: { user_id: userID } });
-        })
-        .catch(err => console.error("Error", err));
+            if (data) return true;
+            else return false;
+        });
+        return res;
 };
 
-/**
- * Returns true or false if a user exists
- * @param {String} userID
- * @returns Boolean
- */
-const checkUser = async (userID) => {
-    let res = Stars.sync()
-    .then(() => {
-        const user = Stars.findOne({ where: { user_id: userID }, raw: true });
-        return user;
-    })
-    .then(data => {
-        if (data) return true;
-        else return false;
-    });
-    return res;
+const newUser = async (userID, name) => {
+    Stars.sync()
+        .then(() => Stars.create({ user_id: userID, username: name }))
+        .catch(err => console.error(err));
 }
 
 /**
- * Adds new user
- * @param {String} userID
- * @param {String} name 
+ * Adds a reading star
+ * Updates database with current display name of user as well
+ * @param {string} userID Discord ID of the user
+ * @param {string} name Display name
+ * @param {string} status "GOOD", "LATE"
  */
-const newUser = async (userID, name) => {
-    let currDate = new Date();
+const addReadingStar = async (userID, name, status) => {
     Stars.sync()
-        .then(() => Stars.create({ user_id: userID, username: name.toString(), last_star: currDate.toString() }) )
-        .catch(err => console.error(err));
+        .then(() => {
+            const user = Stars.findOne({ where: { user_id: userID }, raw: true })
+            return user;
+        })
+        .then(data => {
+            let currStars = data.reading_count + 1;
+            let currStreak = data.reading_streak;
+            let highestStreak = data.reading_highest;
+            let currDate = new Date();
+            if (status === "GOOD")
+                currStreak = currStreak + 1;
+            else if (status === "LATE")
+                currStreak = 1;
+            
+            if (currStreak > highestStreak)
+                currStreak = highestStreak;
+
+            Stars.update({ username: name, reading_count: currStars, reading_streak: currStreak, reading_highest: highestStreak, last_reading: currDate.toString() }, { where: { user_id: userID }});
+        })
 }
 
 /**
@@ -254,4 +249,4 @@ const changeStar = async(id, currStars, currStreak) => {
     .catch(err => console.error(err));
 }
 
-module.exports = { newUser, addStar, checkUser, checkStar, getStars, newDay, manualEntry, getAll, changeStar };
+module.exports = { newUser, addReadingStar, checkUser, checkStar, getStars, newDay, manualEntry, getAll, changeStar };
