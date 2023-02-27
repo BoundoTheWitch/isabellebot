@@ -89,6 +89,11 @@ const checkUser = async (userID) => {
         return res;
 };
 
+/**
+ * Adds new user to database
+ * @param {string} userID 
+ * @param {string} name 
+ */
 const newUser = async (userID, name) => {
     Stars.sync()
         .then(() => Stars.create({ user_id: userID, username: name }))
@@ -96,70 +101,97 @@ const newUser = async (userID, name) => {
 }
 
 /**
- * Adds a reading star
- * Updates database with current display name of user as well
- * @param {string} userID Discord ID of the user
- * @param {string} name Display name
- * @param {string} status "GOOD", "LATE"
- */
-const addReadingStar = async (userID, name, status) => {
-    Stars.sync()
-        .then(() => {
-            const user = Stars.findOne({ where: { user_id: userID }, raw: true })
-            return user;
-        })
-        .then(data => {
-            let currStars = data.reading_count + 1;
-            let currStreak = data.reading_streak;
-            let highestStreak = data.reading_highest;
-            let currDate = new Date();
-            if (status === "GOOD")
-                currStreak = currStreak + 1;
-            else if (status === "LATE")
-                currStreak = 1;
-            
-            if (currStreak > highestStreak)
-                currStreak = highestStreak;
-
-            Stars.update({ username: name, reading_count: currStars, reading_streak: currStreak, reading_highest: highestStreak, last_reading: currDate.toString() }, { where: { user_id: userID }});
-        })
-}
-
-/**
  * Checks to see if user already left star on the same day.
- * @param {String} userID
+ * @param {string} userID
+ * @param {string} type For which type of star to check for ("READING", "WORKOUT")
  * @returns "SAMEDAY" | "GOOD" | "LATE"
  */
-const checkStar = async (userID) => {
+const checkStar = async (userID, type) => {
     let res = Stars.sync()
     .then(() => {
         const user = Stars.findOne({ where: { user_id: userID }, raw: true });
         return user;
     })
     .then(data => {
-        const status = data.star_placed;
+        const status = type === "READING" ? data.reading_placed : data.workout_placed;
+
         if (status === 0)
             return "SAMEDAY";
         else if (status === 1)
             return "GOOD";
-        else
-            return "LATE";
+        else {
+            if (type === "READING")
+                return "LATE";
+            else
+                return "GOOD";
+        }
     })
     .catch(err => console.error("Error", err));
     return res;
 }
 
 /**
+ * Adds a star
+ * Updates database with current display name of user as well
+ * @param {string} userID Discord ID of the user
+ * @param {string} name Display name
+ * @param {string} type Type of star ("READING", "WORKOUT")
+ * @param {string} status "GOOD" | "LATE"
+ */
+const addStar = async (userID, name, type, status) => {
+    Stars.sync()
+        .then(() => {
+            const user = Stars.findOne({ where: { user_id: userID }, raw: true })
+            return user;
+        })
+        .then(data => {
+            if (type === "READING") {
+                let currStars = data.reading_count + 1;
+                let currStreak = data.reading_streak;
+                let highestStreak = data.reading_highest;
+                let currDate = new Date();
+                
+                if (status === "GOOD")
+                    currStreak = currStreak + 1;
+                else if (status === "LATE")
+                    currStreak = 1;
+                
+                if (currStreak > highestStreak)
+                    currStreak = highestStreak;
+    
+                Stars.update({ username: name, reading_count: currStars, reading_streak: currStreak, reading_highest: highestStreak, last_reading: currDate.toString() }, { where: { user_id: userID }});
+            } else if (type === "WORKOUT") {
+                let currStars = data.workout_count + 1;
+                let currStreak = data.workout_streak;
+                let highestStreak = data.workout_higest;
+                let currDate = new Date();
+                
+                currStreak = currStreak + 1;
+                
+                // Getting 4 stars in a week earns a super star
+                if (currStreak === 4)
+                    highestStreak = highestStreak + 1;
+                    
+                Stars.update({ username: name, workout_count: currStars, workout_streak: currStreak, workout_higest: highestStreak, last_workout: currDate.toString() })
+            } else {
+                console.error("No star type included");
+            }
+        })
+}
+
+
+
+/**
  * Get every user and their stars
  * Similar to SELECT * FROM stars WHERE (attributes here)
  */
-const getStars = async () => {
-    let dbStars = await Stars.findAll({ attributes: ['username', 'stars_count', 'highest_streak', 'last_star'], order: [['updatedAt', 'DESC']] });
+const getReadingStars = async () => {
+    let dbStars = await Stars.findAll({ attributes: ['username', 'reading_count', 'reading_streak', 'reading_highest', 'last_reading'], order: [['updatedAt', 'DESC']] });
     let starsUsers = dbStars.map(e => {
         let str;
         let dbDate = new Date(e.last_star);
         let dbDateFormat = dbDate.toLocaleString('en-US', { hour12: true });
-        str = `**${e.username}** | ${e.stars_count}/${e.highest_streak}\n**Last Star:** ${dbDateFormat}\n\n`;
+        str = `**${e.username}** | ${e.reading_streak}/${e.reading_highest} (total stars: ${e.reading_count})\n**Last Star:** ${dbDateFormat}\n\n`;
         return str;
     }).join('');
     return starsUsers;
@@ -190,7 +222,7 @@ const newDay = async () => {
 /**
  * FOR INTERNAL USE ONLY. Manually enter data just in case
  * @param {String} userID Discord ID
- * @param {String} username Their display name (will get updated next time they leave a star)
+ * @param {String} username Their display name
  * @param {Integer} readingStars Current stars in reading
  * @param {Integer} readingStreak Current streak in reading
  * @param {Integer} readingHighest Highest streak in reading
@@ -249,4 +281,4 @@ const changeStar = async(id, currStars, currStreak) => {
     .catch(err => console.error(err));
 }
 
-module.exports = { newUser, addReadingStar, checkUser, checkStar, getStars, newDay, manualEntry, getAll, changeStar };
+module.exports = { checkUser, newUser, checkStar, addStar, getReadingStars, }
