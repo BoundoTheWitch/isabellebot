@@ -73,7 +73,7 @@ Stars.sync({ alter: true });
 
 /**
  * Check if user exists already
- * @param {string} userID 
+ * @param {String} userID 
  * @returns 
  */
 const checkUser = async (userID) => {
@@ -91,8 +91,8 @@ const checkUser = async (userID) => {
 
 /**
  * Adds new user to database
- * @param {string} userID 
- * @param {string} name 
+ * @param {String} userID 
+ * @param {String} name 
  */
 const newUser = async (userID, name) => {
     Stars.sync()
@@ -102,8 +102,8 @@ const newUser = async (userID, name) => {
 
 /**
  * Checks to see if user already left star on the same day.
- * @param {string} userID
- * @param {string} type For which type of star to check for ("READING", "WORKOUT")
+ * @param {String} userID
+ * @param {String} type For which type of star to check for ("READING", "WORKOUT")
  * @returns "SAMEDAY" | "GOOD" | "LATE"
  */
 const checkStar = async (userID, type) => {
@@ -133,10 +133,10 @@ const checkStar = async (userID, type) => {
 /**
  * Adds a star
  * Updates database with current display name of user as well
- * @param {string} userID Discord ID of the user
- * @param {string} name Display name
- * @param {string} type Type of star ("READING", "WORKOUT")
- * @param {string} status "GOOD" | "LATE"
+ * @param {String} userID Discord ID of the user
+ * @param {String} name Display name
+ * @param {String} type Type of star ("READING", "WORKOUT")
+ * @param {String} status "GOOD" | "LATE"
  */
 const addStar = async (userID, name, type, status) => {
     Stars.sync()
@@ -172,7 +172,7 @@ const addStar = async (userID, name, type, status) => {
                 if (currStreak === 4)
                     highestStreak = highestStreak + 1;
                     
-                Stars.update({ username: name, workout_count: currStars, workout_streak: currStreak, workout_higest: highestStreak, last_workout: currDate.toString() })
+                Stars.update({ username: name, workout_count: currStars, workout_streak: currStreak, workout_higest: highestStreak, last_workout: currDate.toString() }, { where: { user_id: userID }});
             } else {
                 console.error("No star type included");
             }
@@ -182,14 +182,13 @@ const addStar = async (userID, name, type, status) => {
 
 
 /**
- * Get every user and their stars
- * Similar to SELECT * FROM stars WHERE (attributes here)
+ * Get reading stars
  */
 const getReadingStars = async () => {
     let dbStars = await Stars.findAll({ attributes: ['username', 'reading_count', 'reading_streak', 'reading_highest', 'last_reading'], order: [['updatedAt', 'DESC']] });
     let starsUsers = dbStars.map(e => {
         let str;
-        let dbDate = new Date(e.last_star);
+        let dbDate = new Date(e.last_reading);
         let dbDateFormat = dbDate.toLocaleString('en-US', { hour12: true });
         str = `**${e.username}** | ${e.reading_streak}/${e.reading_highest} (total stars: ${e.reading_count})\n**Last Star:** ${dbDateFormat}\n\n`;
         return str;
@@ -198,21 +197,64 @@ const getReadingStars = async () => {
 }
 
 /**
- * For cronjob. On start of a new day, increment star_placed value
+ * Get workout stars
+ */
+const getWorkoutStars = async() => {
+    let dbStars = await Stars.findAll({ attributes: ['username', 'workout_count', 'workout_streak', 'workout_highest', 'last_workout'], order: [['updatedAt', 'DESC']] });
+    let starsUsers = dbStars.map(e => {
+        let str;
+        let dbDate = new Date(e.last_workout);
+        let dbDateFormat = dbDate.toLocaleString('en-US', { hour12: true });
+        str = `**${e.username}** | ${e.workout_streak} workouts this week (${e.workout_higest} super stars})\nLast workout: ${dbDateFormat}`
+        return str;
+    }).join('');
+    return starsUsers;
+}
+
+
+/**
+ * On start of a new day, increment (reading/workout)_placed value
  */
 const newDay = async () => {
     const statements = [];
-    const stars = await Stars.findAll({ attributes: ['user_id', 'star_placed'], raw: true });
+    const stars = await Stars.findAll({ attributes: ['user_id', 'reading_placed', 'workout_placed'], raw: true });
 
     for (let i = 0; i < stars.length; i++) {
-        let newStarPlaced = (stars[i].star_placed < 2) ? stars[i].star_placed += 1 : 2;
+        let readingStarPlaced = stars[i].reading_placed < 2 ? stars[i].reading_placed += 1 : 2;
+        let workoutStarPlaced = stars[i].workout_placed;
+        
+        if (workoutStarPlaced === 0)
+            workoutStarPlaced = 1;
+
         statements.push(
             sequelize.query(
                 `UPDATE Stars
-                SET star_placed=${newStarPlaced}
+                SET reading_placed=${readingStarPlaced}, workout_placed=${workoutStarPlaced}
                 WHERE user_id=${stars[i].user_id};`
             )
         );
+    }
+
+    const res = await Promise.all(statements);
+}
+
+/**
+ * On start of a new week, update workout_highest and workout_streak
+ */
+const newWeek = async () => {
+    const statements = [];
+    const stars = await Stars.findAll({attributes: ['user_id', 'workout_streak', 'workout_highest'], raw: true});
+
+    for (let i = 0; i < stars.length; i++) {
+        
+        statements.push(
+            sequelize.query(
+                `UPDATE Stars
+                SET workout_streak=0
+                WHERE user_id=${stars[i].user_id};`
+            )
+        )
+
     }
 
     const res = await Promise.all(statements);
@@ -267,18 +309,4 @@ const getAll = async () => {
     .catch(err => console.error(err));
 }
 
-/**
- * FOR INTERNAL USE Manually update star count
- * @param {String} id ID of the user
- * @param {Integer} currStars Current number of stars
- * @param {Integer} currStreak Highest streak
- */
-const changeStar = async(id, currStars, currStreak) => {
-    Stars.sync()
-    .then(() => {
-        Stars.update({ stars_count: currStars, highest_streak: currStreak }, { where: { user_id: id } });
-    })
-    .catch(err => console.error(err));
-}
-
-module.exports = { checkUser, newUser, checkStar, addStar, getReadingStars, }
+module.exports = { checkUser, newUser, checkStar, addStar, getReadingStars, getWorkoutStars, newDay, newWeek, getAll, manualEntry }
