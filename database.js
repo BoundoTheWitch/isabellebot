@@ -26,17 +26,17 @@ const Stars = sequelize.define('stars', {
     // Reading stars
     reading_count: {
         type: DataTypes.INTEGER,
-        defaultValue: 1,
+        defaultValue: 0,
         allowNull: false
     },
     reading_streak: {
         type: DataTypes.INTEGER,
-        defaultValue: 1,
+        defaultValue: 0,
         allowNull: false
     },
     reading_highest: {
         type: DataTypes.INTEGER,
-        defaultValue: 1,
+        defaultValue: 0,
         allowNull: false
     },
     last_reading: DataTypes.STRING,
@@ -48,12 +48,12 @@ const Stars = sequelize.define('stars', {
     // Workout stars
     workout_count: {
         type: DataTypes.INTEGER,
-        defaultValue: 1,
+        defaultValue: 0,
         allowNull: false
     },
     workout_streak: {
         type: DataTypes.INTEGER,
-        defaultValue: 1,
+        defaultValue: 0,
         allowNull: false
     },
     workout_highest: {
