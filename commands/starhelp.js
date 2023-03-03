@@ -1,10 +1,18 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('starhelp')
-        .setDescription('Rules and info about the Stars Streak in the library'),
+        .setDescription('Rules and info about the Stars Board.'),
     async execute(interaction) {
-        await interaction.reply({ content: `The purpose of the Star Streak challenge is to encourage reading for up to 30 minutes each day. For each day you do your reading you add to your streak. Miss a day then you will start back at 1 star. Don't get too competitve though, it's all in the name of fun afterall!\n\nReading material can include books, textbooks, manga, comic books; anything that's "meaningful." Things like reading a lot of fortunes from fortune cookies do not count, however I'd be very concerned if you managed to eat that many.\n\nIf you're curious about you and others streaks feel free to use \`/starstreaks\`!`, ephemeral: true })
+        let reading = new EmbedBuilder()
+            .setColor(0xd8cd2d)
+            .setTitle(`⭐ Reading Stars ⭐`)
+            .setDescription(`The purpose of the Star Reading challenge is to encourage 30 minutes of reading every day. Reading material can include: textbooks, novels, mangas, long-winded pamphlets; anything that is meaningful reading. So no, unfortunately reading 100 fortune cookies does not count, though I would be very concerned if you did eat so many.\n\nFor each day you complete your reading, use \`/star\` in \`#the-library\` to leave your star for the day. If you miss a day, you will lose your streak. Don't be discouraged though, total number of stars are still recorded to track your progress!\n\nAlso, as a reminder: this is all for fun. Please don't get too competitive.`);
+        let workout = new EmbedBuilder()
+            .setColor(0xd8cd2d)
+            .setTitle(`💪 Workout Stars 💪`)
+            .setDescription(`The purpose of the Star Workout challenge is to encourage 30 minutes of workouts at least 4 times a week. Doing 4 workouts a week will earn you a Super Star ✨. Total number of stars earned will still be tracked.\n\nWhat consitutes a workout? Whatever is within your limitations. So general physical activities like long walks, cleaning, chasing your kid across the house because they found something they shouldn't be playing with--all still count, including regular workouts of course.`)
+        await interaction.reply({ embeds: [reading, workout], ephemeral: true })
     }
 };
