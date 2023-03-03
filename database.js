@@ -152,8 +152,6 @@ const addStar = async (userID, name, type, status) => {
                 let highestStreak = data.reading_highest;
                 let currDate = new Date();
                 
-                console.log(`Init: ${currStreak}`);
-
                 if (status === "GOOD")
                     currStreak = currStreak + 1;
                 else if (status === "LATE")
@@ -161,8 +159,6 @@ const addStar = async (userID, name, type, status) => {
                 
                 if (currStreak > highestStreak)
                     highestStreak = currStreak;
-
-                console.log(`Done: ${currStreak}`);
                 
                 Stars.update({ username: name, reading_count: currStars, reading_streak: currStreak, reading_highest: highestStreak, last_reading: currDate.toString(), reading_placed: 0 }, { where: { user_id: userID }});
             } else if (type === "WORKOUT") {
