@@ -26,7 +26,7 @@ module.exports = {
                 }
             } else {
                 await db.newUser(interaction.user.id, interaction.member.displayName);
-                await interaction.reply({ content: `Hey there ${interaction.user}! Looks like it's your first time. Welcome! I have recorded your first star. If you need some clarity of the rules, feel free to use the \`/starhelp\` command for more info. Happy reading! <:books:1052807705544372244>` })
+                await interaction.reply({ content: `Hey there ${interaction.user}! Looks like it's your first time. Welcome! I have recorded your first star. If you need some clarity of the rules, feel free to use the \`/starhelp\` command for more info. This applies for reading and workout stars!` })
             }
         } else {
             await interaction.reply({ content: 'Oops, you need to use that in `#the-library` or `#diet-slash-exercise`', ephemeral: true })
