@@ -56,9 +56,9 @@ const Stars = sequelize.define('stars', {
         defaultValue: 1,
         allowNull: false
     },
-    workout_higest: {
+    workout_highest: {
         type: DataTypes.INTEGER,
-        defaultValue: 1,
+        defaultValue: 0,
         allowNull: false
     },
     last_workout: DataTypes.STRING,
@@ -164,7 +164,7 @@ const addStar = async (userID, name, type, status) => {
             } else if (type === "WORKOUT") {
                 let currStars = data.workout_count + 1;
                 let currStreak = data.workout_streak;
-                let highestStreak = data.workout_higest;
+                let highestStreak = data.workout_highest;
                 let currDate = new Date();
                 
                 currStreak = currStreak + 1;
@@ -173,7 +173,7 @@ const addStar = async (userID, name, type, status) => {
                 if (currStreak === 4)
                     highestStreak = highestStreak + 1;
                     
-                Stars.update({ username: name, workout_count: currStars, workout_streak: currStreak, workout_higest: highestStreak, last_workout: currDate.toString(), workout_placed: 0 }, { where: { user_id: userID }});
+                Stars.update({ username: name, workout_count: currStars, workout_streak: currStreak, workout_highest: highestStreak, last_workout: currDate.toString(), workout_placed: 0 }, { where: { user_id: userID }});
             } else {
                 console.error("No star type included");
             }
@@ -191,7 +191,7 @@ const getReadingStars = async () => {
         let str;
         let dbDate = new Date(e.last_reading);
         let dbDateFormat = dbDate.toLocaleString('en-US', { hour12: true });
-        str = `**${e.username}** | ${e.reading_streak}/${e.reading_highest} (total stars: ${e.reading_count})\n**Last Star:** ${dbDateFormat}\n\n`;
+        str = `**${e.username}**\n${e.reading_count} total stars | ⭐ ${e.reading_streak}/${e.reading_highest}\n**Last Star:** ${dbDateFormat}\n\n`;
         return str;
     }).join('');
     return starsUsers;
@@ -206,7 +206,7 @@ const getWorkoutStars = async() => {
         let str;
         let dbDate = new Date(e.last_workout);
         let dbDateFormat = dbDate.toLocaleString('en-US', { hour12: true });
-        str = `**${e.username}** | ${e.workout_streak} workouts this week (${e.workout_higest} super stars})\nLast workout: ${dbDateFormat}`
+        str = `**${e.username}**\n${e.workout_count} total stars | ⭐ ${e.workout_streak} ✨ ${e.workout_highest}\nLast workout: ${dbDateFormat}\n\n`;
         return str;
     }).join('');
     return starsUsers;
@@ -251,7 +251,7 @@ const newWeek = async () => {
         statements.push(
             sequelize.query(
                 `UPDATE Stars
-                SET workout_streak=0
+                SET workout_streak=0, workout_highest=0
                 WHERE user_id=${stars[i].user_id};`
             )
         )
@@ -287,7 +287,7 @@ const manualEntry = async (userID, username, readingStars, readingStreak, readin
                 last_reading: readingDate,
                 workout_count: workoutStars,
                 workout_streak: workoutStreak,
-                workout_higest: workoutHighest,
+                workout_highest: workoutHighest,
                 last_workout: workoutDate
             });
         })
@@ -304,7 +304,7 @@ const getAll = async () => {
     })
     .then(data => {
         data.map((e) => {
-            console.log(`'${e.user_id}', '${e.username}', ${e.reading_count}, ${e.reading_streak}, ${e.reading_highest}, '${e.last_reading}', ${e.workout_count}, ${e.workout_streak}, ${e.workout_higest}, '${e.last_workout}'`);
+            console.log(`'${e.user_id}', '${e.username}', ${e.reading_count}, ${e.reading_streak}, ${e.reading_highest}, '${e.last_reading}', ${e.workout_count}, ${e.workout_streak}, ${e.workout_highest}, '${e.last_workout}'`);
         })
     })
     .catch(err => console.error(err));
