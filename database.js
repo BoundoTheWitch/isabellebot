@@ -131,6 +131,27 @@ const checkStar = async (userID, type) => {
 }
 
 /**
+ * Checks to see if a super star is earned.
+ * Returns true if so.
+ * @param {String} userID 
+ * @returns Boolean
+ */
+const checkSuperStar = async userID => {
+    let res = Stars.sync()
+        .then(() => {
+            const user = Stars.findOne({ where: { user_id: userID }, raw: true });
+            return user;
+        })
+        .then(data => {
+            const currStreak = data.workout_streak;
+            if (currStreak === 4) return true;
+            else return false;
+        })
+        .catch(err => console.error("Error", err));
+    return res;
+}
+
+/**
  * Adds a star
  * Updates database with current display name of user as well
  * @param {String} userID Discord ID of the user
@@ -309,4 +330,4 @@ const getAll = async () => {
     .catch(err => console.error(err));
 }
 
-module.exports = { checkUser, newUser, checkStar, addStar, getReadingStars, getWorkoutStars, newDay, newWeek, getAll, manualEntry }
+module.exports = { checkUser, newUser, checkStar, checkSuperStar, addStar, getReadingStars, getWorkoutStars, newDay, newWeek, getAll, manualEntry }
