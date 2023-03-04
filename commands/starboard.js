@@ -3,7 +3,7 @@ const db = require('../database');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('starstreaks')
+        .setName('starboard')
         .setDescription('A "leader board" of sorts for the Star Board.'),
     async execute(interaction) {
         const stars = interaction.channel.name === "the-library" ? await db.getReadingStars() : await db.getWorkoutStars();
