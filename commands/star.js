@@ -20,8 +20,16 @@ module.exports = {
                         await db.addStar(interaction.user.id, interaction.member.displayName, 'READING', status);
                         await interaction.reply({ content: `⭐ Thank you for leaving your star today! ⭐` });
                     } else if (currChannel === 'diet-slash-exercise') {
+                        let outcome; // Default outcome
+
                         await db.addStar(interaction.user.id, interaction.member.displayName, 'WORKOUT', status);
-                        await interaction.reply({ content: `💪 Thank you for leaving your star today! 💪\n*(Don't forget to drink some water 🥤)*` });
+
+                        if (await db.checkSuperStar(interaction.user.id))
+                            outcome = '💪 ✨ You got a super star! ✨ 💪\n';
+                        else
+                            outcome = `💪 Thank you for leaving your star today! 💪\n`;
+                        
+                        await interaction.reply({ content: `${outcome}*(Don't forget to drink some water 🥤)*` });
                     }
                 }
             } else {
