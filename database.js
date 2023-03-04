@@ -139,7 +139,6 @@ const checkStar = async (userID, type) => {
  * @param {String} status "GOOD" | "LATE"
  */
 const addStar = async (userID, name, type, status) => {
-    console.log(status);
     Stars.sync()
         .then(() => {
             const user = Stars.findOne({ where: { user_id: userID }, raw: true })
