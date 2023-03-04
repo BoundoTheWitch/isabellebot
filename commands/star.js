@@ -20,7 +20,7 @@ module.exports = {
                         await db.addStar(interaction.user.id, interaction.member.displayName, 'READING', status);
                         await interaction.reply({ content: `⭐ Thank you for leaving your star today! ⭐` });
                     } else if (currChannel === 'diet-slash-exercise') {
-                        let outcome; // Default outcome
+                        let outcome;
 
                         await db.addStar(interaction.user.id, interaction.member.displayName, 'WORKOUT', status);
 
