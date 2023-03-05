@@ -56,6 +56,6 @@ The code is all running on an old laptop that is running Node.js on a headless D
 
 # Anything I should know before eyeing on your code?
 
-Usually when I write code I try to focus on making sure the code can be maintained easily, such as avoiding hardcoding things, or avoid repeating code, or over-complicating it. Admittedly I didn't do any of that very much this time around, but only because I was in a hurry to try and get Isabelle back online after she was offline for about 2 years due to many complications. I did better than my early coding practices.
+Usually when I write code I try to focus on making sure the code can be maintained easily, such as avoiding hardcoding things, or avoid repeating code, or over-complicating it. Admittedly I didn't do it as much as I would've liked to, but I was in a hurry to try and get Isabelle back online after she was offline for about 2 years due to many complications. I did better than my earlier coding practices.
 
 I have a list of things that I am trying to accomplish, such as getting the old dev branch on track again and refactoring some of my code. So if you happen to be one of those weirdos who like to poke around on random repos, feel free to chime in if you have a complaint, just don't be rude about it, please.
