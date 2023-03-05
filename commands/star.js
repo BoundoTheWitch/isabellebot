@@ -9,10 +9,13 @@ module.exports = {
     async execute(interaction) {
         const currUser = await db.checkUser(interaction.user.id);
         const currChannel = interaction.channel.name;
+
         if (currChannel === 'the-library' || currChannel === 'diet-slash-exercise') {
             const type = currChannel === "the-library" ? "READING" : "WORKOUT";
+        
             if (currUser) {
                 let status = await db.checkStar(interaction.user.id, type);
+        
                 if (status === "SAMEDAY")
                     await interaction.reply({ content: `Looks like you've already left a star today. Good job!\n(Start of a new day starts at \`6am\`. It's currently \`${currentTime()}\`)`, ephemeral: true });
                 else {

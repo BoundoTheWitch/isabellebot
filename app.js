@@ -44,12 +44,14 @@ fs.writeFile('./commands/list.json', JSON.stringify(list), (err) => {
 
 // Grab channel IDs
 let channelLibrary;
+let channelWorkout;
 
 // On startup
 client.on('ready', () => {
     client.user.setActivity('the mayor', { type: ActivityType.Listening });
     console.log(`${client.user.tag} online.`);
-    channelLibrary = client.channels.cache.find(ch => ch.name === "the-library" && ch.guild.id === process.env.SERVER.toString());    
+    channelLibrary = client.channels.cache.find(ch => ch.name === "the-library" && ch.guild.id === process.env.SERVER.toString());
+    channelWorkout = client.channels.cache.find(ch => ch.name === 'diet-slash-exercise' && ch.guild.id === process.env.SERVER.toString());
 });
 
 // Message posted
@@ -125,30 +127,31 @@ let ranQuote = [
     "It's a random quote! I don't think I was supposed to read that. It's a new day!",
     "...oh, sorry, I was too busy reading. Speaking of which, it's a new day!",
     "What time is it? It's a new day!",
-    "...zzz...zzz...HUH WHAT? Oh, I almost slept in. New day!",
-    "No, I said DON'T do that.\nOh, I'm sorry, wrong chat.",
+    "...zzz...zzz...HUH WHAT? Oh, I almost slept in. Uhhh...new day!",
+    "Got another job for your crew, Tom.\nOh, I'm sorry, wrong chat.",
     "Day? Yes...ish. New? Yes.",
     "New day? New day.",
     "Uhhhh...I can't think of anything clever to say. It's a new day! ⁽ʰᵉʸ ᵗʰᵃᵗ ʳʰʸᵐᵉˢᵎ⁾",
-    "HEYEVERYONEIT'SANEWDAYHELPIHADTOOMUCHCOFFEE\n*shakes head*\n",
-    "Here comes the sun\n(Doo-d-doo-doo)\nHere comes the sun\nAnd I say,\"It's a new day!\"",
-    "They say the island is just a game. And everything we say? Or do? It's just to amuse somebody else!\n...I'm sorry, I don't know what came over me. It's a new day!",
+    "HEYEVERYONEIT'SANEWDAYHELPIHADTOOMUCHCOFFEE\n*shakes head*",
+    "Here comes the sun\n(Doo-d-doo-doo)\nHere comes the sun\nAnd I say, **\"It's a new day!\"**",
+    "They say the island is just a game.\nAnd everything we say? Or do?\nIt's just to amuse somebody else!\n...I'm sorry, I don't know what came over me. It's a new day!",
 ];
 ranQuote.sort(() => Math.random() - 0.5);
 
-// Cron job to send reminder to everyone about posting their stars at 06:00:00 (system time)
-cron.schedule('0 0 6 * * *', async () => {
+// Runs every day at 6am
+// cron.schedule('0 0 6 * * *', async () => {
+cron.schedule('0 2 22 * * *', async () => {
     let quote;
-    let lastPost;
-    const stars = await db.getStars();
+    let lastPost = await db.getLastPost("READING");
+    const stars = await db.getReadingStars();
     const embed = new EmbedBuilder()
         .setColor(0xf2cf74)
-        .setTitle(`<:stars:1053218314211557456> Stars Streak Leader Board <:stars:1053218314211557456>`)
+        .setTitle(`⭐ Reading Star Board ⭐`)
         .setDescription(`${stars}`);
 
-    if (fs.existsSync('./lastpost.txt')) {
-        lastPost = fs.readFileSync('./lastpost.txt', 'utf8');
-        channelLibrary.messages.fetch(lastPost).then(msg => msg.delete());
+
+    if (lastPost) {
+        channelLibrary.message.fetch(lastPost).then(msg => msg.delete());
     }
 
     if (quoteCounter > ranQuote.length - 2) {
@@ -158,14 +161,23 @@ cron.schedule('0 0 6 * * *', async () => {
     quoteCounter++;
     quote = ranQuote[quoteCounter];
     
-    channelLibrary.send({ content: `${quote}\nDon't forget to leave your star later if you have done your reading.`, embeds: [embed] }).then(message => {
-        fs.writeFile('./lastpost.txt', message.id, (err) => {
-            if (err) return console.error(err);
-        });
-    });
+    channelLibrary.send({ content: `${quote}\nDon't forget to leave your star later if you have done your reading.`, embeds: [embed] })
+        .then(async msg => await db.newDay(msg.id));
 
-    db.newDay();
 });
 
+
+// Runs every week on Monday at 6am
+cron.schedule('0 0 6 * * Mon', async () => {
+    const stars = await db.getWorkoutStars();
+    
+
+    const embed = new EmbedBuilder()
+    .setColor(0xf2cf74)
+    .setTitle(`💪 Workout Star Board 💪`)
+    .setDescription(`${stars}`)
+    channelWorkout.send({ content: `It's the start of a new week! Let's see how everyone's doing 👀`, embeds: [embed] })
+    await db.newWeek();
+})
 
 client.login(process.env.TOKEN);

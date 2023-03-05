@@ -23,7 +23,7 @@ const Stars = sequelize.define('stars', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    // Reading stars
+    // Reading stars.
     reading_count: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
@@ -45,7 +45,7 @@ const Stars = sequelize.define('stars', {
         defaultValue: 0,
         allowNull: false
     },
-    // Workout stars
+    // Workout stars.
     workout_count: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
@@ -68,11 +68,15 @@ const Stars = sequelize.define('stars', {
         allowNull: false
     }
 });
-Stars.sync({ alter: true });
 
+
+const StarPosts = sequelize.define('starposts', {
+    post_type: DataTypes.STRING,
+    post_id: DataTypes.STRING
+});
 
 /**
- * Check if user exists already
+ * Check if user exists already.
  * @param {String} userID 
  * @returns 
  */
@@ -90,7 +94,7 @@ const checkUser = async (userID) => {
 };
 
 /**
- * Adds new user to database
+ * Adds new user to database.
  * @param {String} userID 
  * @param {String} name 
  */
@@ -152,10 +156,10 @@ const checkSuperStar = async userID => {
 }
 
 /**
- * Adds a star
- * Updates database with current display name of user as well
- * @param {String} userID Discord ID of the user
- * @param {String} name Display name
+ * Adds a star.
+ * Updates database with current display name of user as well.
+ * @param {String} userID Discord ID of the user.
+ * @param {String} name Display name.
  * @param {String} type Type of star ("READING", "WORKOUT")
  * @param {String} status "GOOD" | "LATE"
  */
@@ -189,7 +193,7 @@ const addStar = async (userID, name, type, status) => {
                 
                 currStreak = currStreak + 1;
                 
-                // Getting 4 stars in a week earns a super star
+                // Getting 4 stars in a week earns a super star.
                 if (currStreak === 4)
                     highestStreak = highestStreak + 1;
                     
@@ -203,7 +207,7 @@ const addStar = async (userID, name, type, status) => {
 
 
 /**
- * Get reading stars
+ * Get reading stars.
  */
 const getReadingStars = async () => {
     let dbStars = await Stars.findAll({ attributes: ['username', 'reading_count', 'reading_streak', 'reading_highest', 'last_reading'], order: [['updatedAt', 'DESC']] });
@@ -218,7 +222,7 @@ const getReadingStars = async () => {
 }
 
 /**
- * Get workout stars
+ * Get workout stars.
  */
 const getWorkoutStars = async() => {
     let dbStars = await Stars.findAll({ attributes: ['username', 'workout_count', 'workout_streak', 'workout_highest', 'last_workout'], order: [['updatedAt', 'DESC']] });
@@ -235,8 +239,9 @@ const getWorkoutStars = async() => {
 
 /**
  * On start of a new day, increment (reading/workout)_placed value
+ * @param {String} postID ID of the last reminder post
  */
-const newDay = async () => {
+const newDay = async (postID) => {
     const statements = [];
     const stars = await Stars.findAll({ attributes: ['user_id', 'reading_placed', 'workout_placed'], raw: true });
 
@@ -254,6 +259,13 @@ const newDay = async () => {
                 WHERE user_id=${stars[i].user_id};`
             )
         );
+        statements.push(
+            sequelize.query(
+                `UPDATE starposts
+                SET post_id=${postID}
+                WHERE post_type="READING"`
+            )
+        );
     }
 
     const res = await Promise.all(statements);
@@ -261,14 +273,16 @@ const newDay = async () => {
 
 /**
  * On start of a new week, update workout_highest and workout_streak
+ * @param {*} postID ID of the last reminder post
  */
-const newWeek = async () => {
+const newWeek = async (postID) => {
     const statements = [];
     const stars = await Stars.findAll({attributes: ['user_id', 'workout_streak', 'workout_highest'], raw: true});
 
     for (let i = 0; i < stars.length; i++) {
         
-        statements.push(
+        statements
+        .push(
             sequelize.query(
                 `UPDATE Stars
                 SET workout_streak=0, workout_highest=0
@@ -281,6 +295,23 @@ const newWeek = async () => {
     const res = await Promise.all(statements);
 }
 
+/**
+ * Gets the ID of the last post.
+ * @param {String} type 
+ * @returns 
+ */
+const getLastPost = async (type) => {
+    const res = StarPosts.sync()
+        .then(() => {
+            const post = StarPosts.findOne({ where: { post_type: type }, raw: true });
+            return post;
+        })
+        .then(data => {
+            return data.post_id;
+        });
+
+    return res;
+}
 
 /**
  * FOR INTERNAL USE ONLY. Manually enter data just in case
@@ -330,4 +361,4 @@ const getAll = async () => {
     .catch(err => console.error(err));
 }
 
-module.exports = { checkUser, newUser, checkStar, checkSuperStar, addStar, getReadingStars, getWorkoutStars, newDay, newWeek, getAll, manualEntry }
+module.exports = { checkUser, newUser, checkStar, checkSuperStar, addStar, getReadingStars, getWorkoutStars, newDay, newWeek, getAll, getLastPost, manualEntry }
