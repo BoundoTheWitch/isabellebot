@@ -15,10 +15,14 @@ I continue to update and change Isabelle Bot to get more experience in developin
 * Audits edited and deleted messages
 * - She does not save images. If the post has an image then nothing will show up on the event logs except for whatever the message contains. So if a post has an image with the message "check out this cool thing I found!" then the only thing that will get saved to the logs is the message but not the image. For safety reasons I would rather not have any images saved.
 
+<picture>
+    <img alt="A Discord post saying 'check out this funny meme I found' with an image that simply says 'embarrassing image' as a silly example of posting the wrong image." src="./images/example-1.png">
+    <figcaption>A post with an image.</figcaption>
+</picture>
 
 <picture>
-    <img alt="An example of a log of a deleted image that contains an image. The post only shows the message." src="./images/event-log-example.png">
-    <figcaption>An example of a log of a deleted image that contains an image.</figcaption>
+    <img alt="An example of a log of a deleted image that contains an image. The post only shows the message." src="./images/example-2.png">
+    <figcaption>An example of a log of a deleted post that contains an image.</figcaption>
 </picture>
 
 <hr>
