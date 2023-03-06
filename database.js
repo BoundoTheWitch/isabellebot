@@ -40,11 +40,7 @@ const Stars = sequelize.define('stars', {
         allowNull: false
     },
     last_reading: DataTypes.STRING,
-    reading_placed: {
-        type: DataTypes.INTEGER,
-        defaultValue: 0,
-        allowNull: false
-    },
+    reading_placed: DataTypes.INTEGER,
     // Workout stars.
     workout_count: {
         type: DataTypes.INTEGER,
@@ -62,11 +58,7 @@ const Stars = sequelize.define('stars', {
         allowNull: false
     },
     last_workout: DataTypes.STRING,
-    workout_placed: {
-        type: DataTypes.INTEGER,
-        defaultValue: 0,
-        allowNull: false
-    }
+    workout_placed: DataTypes.INTEGER
 });
 Stars.sync();
 
@@ -122,7 +114,7 @@ const checkStar = async (userID, type) => {
 
         if (status === 0)
             return "SAMEDAY";
-        else if (status === 1)
+        else if (status === 1 || status === null)
             return "GOOD";
         else {
             if (type === "READING")
@@ -182,7 +174,7 @@ const addStar = async (userID, name, type, status) => {
                 else if (status === "LATE")
                     currStreak = 1;
                 
-                if (currStreak > highestStreak)
+                if (currStreak > highestStreak || highestStreak === null)
                     highestStreak = currStreak;
                 
                 Stars.update({ username: name, reading_count: currStars, reading_streak: currStreak, reading_highest: highestStreak, last_reading: currDate.toString(), reading_placed: 0 }, { where: { user_id: userID }});
