@@ -20,6 +20,8 @@ I continue to update and change Isabelle Bot to get more experience in developin
     <figcaption>A post with an image.</figcaption>
 </picture>
 
+<br>
+
 <picture>
     <img alt="An example of a log of a deleted image that contains an image. The post only shows the message." src="./images/example-2.png">
     <figcaption>An example of a log of a deleted post that contains an image.</figcaption>
