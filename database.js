@@ -68,12 +68,13 @@ const Stars = sequelize.define('stars', {
         allowNull: false
     }
 });
-
+Stars.sync();
 
 const StarPosts = sequelize.define('starposts', {
     post_type: DataTypes.STRING,
     post_id: DataTypes.STRING
 });
+StarPosts.sync();
 
 /**
  * Check if user exists already.
@@ -225,7 +226,8 @@ const getReadingStars = async () => {
  * Get workout stars.
  */
 const getWorkoutStars = async() => {
-    let dbStars = await Stars.findAll({ attributes: ['username', 'workout_count', 'workout_streak', 'workout_highest', 'last_workout'], order: [['updatedAt', 'DESC']] });
+    const Op = Sequelize.Op;
+    let dbStars = await Stars.findAll({ attributes: ['username', 'workout_count', 'workout_streak', 'workout_highest', 'last_workout'], order: [['updatedAt', 'DESC']], where: { workout_count: { [Op.gt]: 0 } } });
     let starsUsers = dbStars.map(e => {
         let str;
         let dbDate = new Date(e.last_workout);
@@ -281,14 +283,17 @@ const newWeek = async (postID) => {
 
     for (let i = 0; i < stars.length; i++) {
         
-        statements
-        .push(
-            sequelize.query(
-                `UPDATE Stars
-                SET workout_streak=0, workout_highest=0
-                WHERE user_id=${stars[i].user_id};`
-            )
-        )
+        statements.push(sequelize.query(
+            `UPDATE Stars
+            SET workout_streak=0, workout_highest=0
+            WHERE user_id=${stars[i].user_id};`
+        ));
+
+        statements.push(sequelize.query(
+            `UPDATE starposts
+            SET post_id=${postID}
+            WHERE post_type="WORKOUT";`
+        ));
 
     }
 
