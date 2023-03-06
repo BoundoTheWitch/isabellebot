@@ -139,7 +139,8 @@ let ranQuote = [
 ranQuote.sort(() => Math.random() - 0.5);
 
 // Runs every day at 6am
-cron.schedule('0 0 6 * * *', async () => {
+cron.schedule('0 17 20 * * *', async () => {
+// cron.schedule('0 0 6 * * *', async () => {
     let quote;
     const lastPost = await db.getLastPost("READING");
     const stars = await db.getReadingStars();
