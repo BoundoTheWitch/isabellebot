@@ -139,10 +139,9 @@ let ranQuote = [
 ranQuote.sort(() => Math.random() - 0.5);
 
 // Runs every day at 6am
-// cron.schedule('0 0 6 * * *', async () => {
-cron.schedule('0 2 22 * * *', async () => {
+cron.schedule('0 0 6 * * *', async () => {
     let quote;
-    let lastPost = await db.getLastPost("READING");
+    const lastPost = await db.getLastPost("READING");
     const stars = await db.getReadingStars();
     const embed = new EmbedBuilder()
         .setColor(0xf2cf74)
@@ -150,9 +149,9 @@ cron.schedule('0 2 22 * * *', async () => {
         .setDescription(`${stars}`);
 
 
-    if (lastPost) {
-        channelLibrary.message.fetch(lastPost).then(msg => msg.delete());
-    }
+    if (lastPost)
+        channelLibrary.messages.fetch(lastPost).then(msg => msg.delete());
+
 
     if (quoteCounter > ranQuote.length - 2) {
         ranQuote.sort(() => Math.random() - 0.5);
@@ -169,15 +168,23 @@ cron.schedule('0 2 22 * * *', async () => {
 
 // Runs every week on Monday at 6am
 cron.schedule('0 0 6 * * Mon', async () => {
+    console.log("Inside");
+    const lastPost = await db.getLastPost("WORKOUT");
     const stars = await db.getWorkoutStars();
     
+    console.log(`Variables set:\nlastPost - ${lastPost}`);
 
     const embed = new EmbedBuilder()
-    .setColor(0xf2cf74)
-    .setTitle(`💪 Workout Star Board 💪`)
-    .setDescription(`${stars}`)
+        .setColor(0xf2cf74)
+        .setTitle(`💪 Workout Star Board 💪`)
+        .setDescription(`${stars}`);
+    
+    if (lastPost)
+        channelWorkout.messages.fetch(lastPost).then(msg => msg.delete());
+
+
     channelWorkout.send({ content: `It's the start of a new week! Let's see how everyone's doing 👀`, embeds: [embed] })
-    await db.newWeek();
+        .then(async msg => await db.newWeek(msg.id));
 })
 
 client.login(process.env.TOKEN);
