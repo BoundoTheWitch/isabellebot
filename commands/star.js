@@ -5,7 +5,7 @@ const { currentTime } = require('../util');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('star')
-        .setDescription('Leave your star for your streak in the library!'),
+        .setDescription('Leave your star for your streak in #the-library, or in #diet-slash-exercise'),
     async execute(interaction) {
         const currUser = await db.checkUser(interaction.user.id);
         const currChannel = interaction.channel.name;
