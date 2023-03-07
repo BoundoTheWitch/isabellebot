@@ -170,12 +170,9 @@ cron.schedule('0 0 6 * * *', async () => {
 
 // Runs every week on Monday at 6am
 cron.schedule('0 0 6 * * Mon', async () => {
-    console.log("Inside");
     const lastPost = await db.getLastPost("WORKOUT");
     const stars = await db.getWorkoutStars();
     
-    console.log(`Variables set:\nlastPost - ${lastPost}`);
-
     const embed = new EmbedBuilder()
         .setColor(0xf2cf74)
         .setTitle(`💪 Workout Star Board 💪`)
