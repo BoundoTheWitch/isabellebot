@@ -136,7 +136,7 @@ let ranQuote = [
     "Here comes the sun\n(Doo-d-doo-doo)\nHere comes the sun\nAnd I say, **\"It's a new day!\"**",
     "They say the island is just a game.\nAnd everything we say? Or do?\nIt's just to amuse somebody else!\n...I'm sorry, I don't know what came over me. It's a new day!",
     "It's a new day! Let's get that reading...did I do the meme right?",
-    "Good morning, everyone!\nRight now on undefined, it's *6:00 AM* on *[Object object]*.\nHmmm...There really ins't any news to speak of today...\nError: Cannot find module './dryer/socks"
+    "Good morning, everyone!\nRight now on undefined, it's *6:00 AM* on *[Object object]*.\nHmmm...There really isn't any news to speak of today...\nError: Cannot find module './dryer/socks"
 ];
 ranQuote.sort(() => Math.random() - 0.5);
 
@@ -184,6 +184,6 @@ cron.schedule('0 0 6 * * Mon', async () => {
 
     channelWorkout.send({ content: `It's the start of a new week! Let's see how everyone's doing 👀`, embeds: [embed] })
         .then(async msg => await db.newWeek(msg.id));
-})
+});
 
 client.login(process.env.TOKEN);
