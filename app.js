@@ -135,12 +135,13 @@ let ranQuote = [
     "HEYEVERYONEIT'SANEWDAYHELPIHADTOOMUCHCOFFEE\n*shakes head*",
     "Here comes the sun\n(Doo-d-doo-doo)\nHere comes the sun\nAnd I say, **\"It's a new day!\"**",
     "They say the island is just a game.\nAnd everything we say? Or do?\nIt's just to amuse somebody else!\n...I'm sorry, I don't know what came over me. It's a new day!",
+    "It's a new day! Let's get that reading...did I do the meme right?",
+    "Good morning, everyone!\nRight now on undefined, it's *6:00 AM* on *[Object object]*.\nHmmm...There really ins't any news to speak of today...\nError: Cannot find module './dryer/socks"
 ];
 ranQuote.sort(() => Math.random() - 0.5);
 
 // Runs every day at 6am
-cron.schedule('0 17 20 * * *', async () => {
-// cron.schedule('0 0 6 * * *', async () => {
+cron.schedule('0 0 6 * * *', async () => {
     let quote;
     const lastPost = await db.getLastPost("READING");
     const stars = await db.getReadingStars();
