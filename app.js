@@ -124,19 +124,26 @@ let quoteCounter = -1;
 let ranQuote = [
     "Hello everyone! It's the start of a new day.",
     "Greetings fellow reading pals, it's a new day!",
-    "It's a random quote! I don't think I was supposed to read that. It's a new day!",
+    "Random quote! I don't think I was supposed to read that. It's a new day!",
     "...oh, sorry, I was too busy reading. Speaking of which, it's a new day!",
     "What time is it? It's a new day!",
     "...zzz...zzz...HUH WHAT? Oh, I almost slept in. Uhhh...new day!",
-    "Got another job for your crew, Tom.\nOh, I'm sorry, wrong chat.",
-    "Day? Yes...ish. New? Yes.",
+    "Got another job for your crew, Tom.\nOh, I'm sorry, wrong chat. Ummm...new day!",
+    "Day? Yes. New? Yes.",
     "New day? New day.",
     "Uhhhh...I can't think of anything clever to say. It's a new day! ⁽ʰᵉʸ ᵗʰᵃᵗ ʳʰʸᵐᵉˢᵎ⁾",
     "HEYEVERYONEIT'SANEWDAYHELPIHADTOOMUCHCOFFEE\n*shakes head*",
-    "Here comes the sun\n(Doo-d-doo-doo)\nHere comes the sun\nAnd I say, **\"It's a new day!\"**",
+    "🎶Here comes the sun\n*(Doo-d-doo-doo)*\nHere comes the sun\nAnd I say, **\"It's a new day!\"**🎶",
     "They say the island is just a game.\nAnd everything we say? Or do?\nIt's just to amuse somebody else!\n...I'm sorry, I don't know what came over me. It's a new day!",
     "It's a new day! Let's get that reading...did I do the meme right?",
-    "Good morning, everyone!\nRight now on undefined, it's *6:00 AM* on *[Object object]*.\nHmmm...There really isn't any news to speak of today...\nError: Cannot find module './dryer/socks"
+    "Good morning, everyone!\nRight now on *undefined*, it's *NaN AM* on *[Object object]*.\nHmmm...There really isn't any news to speak of today...\nError: Cannot find module './dryer/socks",
+    "ModuleNotFoundError: No module named 'quotes'\nJust kidding, I don't speak Python! It's a new *[Object object]*!",
+    "Hello everyone! It's the day of a new start.\nWait, that wasn't right.",
+    "*cough cough*\nS-sorry, my voice is still a bit raspy from karaoke last night. It's a new day!\n*cough cough*",
+    "I was told to be sassy with this one. I can't do that. But I can tell you it's a new day!",
+    "Breaking the fourth wall isn't funny. Because the roof would fall!\n...sorry. It's a new day!",
+    "I caught a black bass! The most metal of all fish!\nSorry, wrong script. It's a new day!",
+    "こんにちは、みんな！ 新しい日です！\nOops, forgot to change my language settings."
 ];
 ranQuote.sort(() => Math.random() - 0.5);
 
