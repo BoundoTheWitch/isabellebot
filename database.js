@@ -141,9 +141,10 @@ const checkSuperStar = async userID => {
         })
         .then(data => {
             const currStreak = data.workout_streak;
-            const currHighest = data.workout_highest;
+            let currHighest = data.workout_highest;
             if (currStreak === 3) {
-                Stars.update({ workout_highest: currHighest++ });
+                currHighest++;
+                Stars.update({ workout_highest: currHighest }, { where: { user_id: userID } });
                 return true;
             }
             else return false;
