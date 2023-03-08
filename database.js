@@ -177,7 +177,7 @@ const addStar = async (userID, name, type, status) => {
                 if (status === "GOOD")
                     currStreak++;
                 else if (status === "LATE")
-                    currStreak++;
+                    currStreak = 0;
                 
                 if (currStreak > highestStreak || highestStreak === null)
                     highestStreak = currStreak;
