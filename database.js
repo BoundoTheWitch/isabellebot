@@ -179,18 +179,19 @@ const addStar = async (userID, name, type, status) => {
                 
                 Stars.update({ username: name, reading_count: currStars, reading_streak: currStreak, reading_highest: highestStreak, last_reading: currDate.toString(), reading_placed: 0 }, { where: { user_id: userID }});
             } else if (type === "WORKOUT") {
-                let currStars = data.workout_count + 1;
+                let currStars = data.workout_count;
                 let currStreak = data.workout_streak;
                 let highestStreak = data.workout_highest;
                 let currDate = new Date();
-                
-                currStreak = currStreak + 1;
-                
+
+                currStars++;
+                currStreak++;
+
                 // Getting 4 stars in a week earns a super star.
                 if (currStreak === 4)
                     highestStreak = highestStreak + 1;
                     
-                Stars.update({ username: name, workout_count: currStars, workout_streak: currStreak, workout_highest: highestStreak, last_workout: currDate.toString(), workout_placed: 0 }, { where: { user_id: userID }});
+                Stars.update({ username: name, workout_count: currStars + 1, workout_streak: currStreak, workout_highest: highestStreak, last_workout: currDate.toString(), workout_placed: 0 }, { where: { user_id: userID }});
             } else {
                 console.error("No star type included");
             }
