@@ -141,7 +141,11 @@ const checkSuperStar = async userID => {
         })
         .then(data => {
             const currStreak = data.workout_streak;
-            if (currStreak === 4) return true;
+            const currHighest = data.workout_highest;
+            if (currStreak === 3) {
+                Stars.update({ workout_highest: currHighest++ });
+                return true;
+            }
             else return false;
         })
         .catch(err => console.error("Error", err));
@@ -164,15 +168,15 @@ const addStar = async (userID, name, type, status) => {
         })
         .then(data => {
             if (type === "READING") {
-                let currStars = data.reading_count + 1;
+                let currStars = data.reading_count;
                 let currStreak = data.reading_streak;
                 let highestStreak = data.reading_highest;
                 let currDate = new Date();
                 
                 if (status === "GOOD")
-                    currStreak = currStreak + 1;
+                    currStreak++;
                 else if (status === "LATE")
-                    currStreak = 1;
+                    currStreak++;
                 
                 if (currStreak > highestStreak || highestStreak === null)
                     highestStreak = currStreak;
@@ -181,17 +185,12 @@ const addStar = async (userID, name, type, status) => {
             } else if (type === "WORKOUT") {
                 let currStars = data.workout_count;
                 let currStreak = data.workout_streak;
-                let highestStreak = data.workout_highest;
                 let currDate = new Date();
 
                 currStars++;
                 currStreak++;
-
-                // Getting 4 stars in a week earns a super star.
-                if (currStreak === 4)
-                    highestStreak = highestStreak + 1;
                     
-                Stars.update({ username: name, workout_count: currStars + 1, workout_streak: currStreak, workout_highest: highestStreak, last_workout: currDate.toString(), workout_placed: 0 }, { where: { user_id: userID }});
+                Stars.update({ username: name, workout_count: currStars, workout_streak: currStreak, last_workout: currDate.toString(), workout_placed: 0 }, { where: { user_id: userID }});
             } else {
                 console.error("No star type included");
             }
