@@ -228,7 +228,10 @@ const getWorkoutStars = async() => {
         str = `**${e.username}**\n${e.workout_count} total stars | ⭐ ${e.workout_streak} ✨ ${e.workout_highest}\nLast workout: ${dbDateFormat}\n\n`;
         return str;
     }).join('');
-    return starsUsers;
+    if (starsUsers)
+        return starsUsers;
+    else
+        return "Nothing yet...";
 }
 
 
