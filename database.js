@@ -169,7 +169,7 @@ const addStar = async (userID, name, type, status) => {
         })
         .then(data => {
             if (type === "READING") {
-                let currStars = data.reading_count;
+                let currStars = data.reading_count + 1;
                 let currStreak = data.reading_streak;
                 let highestStreak = data.reading_highest;
                 let currDate = new Date();
