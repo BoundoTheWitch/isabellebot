@@ -1,5 +1,4 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const prompt = require('prompt-sync')({ sigint: true });
 const dotenv = require('dotenv');
 dotenv.config();
 
