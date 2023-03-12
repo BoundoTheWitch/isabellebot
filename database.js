@@ -196,7 +196,8 @@ const addStar = async (userID, name, type, status) => {
             } else {
                 console.error("No star type included");
             }
-        })
+        });
+    console.log(`Star added:\n${name} - ${type} - ${status}`);
 }
 
 
