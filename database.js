@@ -84,7 +84,7 @@ const checkUser = async (userID) => {
             if (data) return true;
             else return false;
         });
-        return res;
+    return res;
 };
 
 /**
