@@ -38,7 +38,7 @@ module.exports = {
             } else {
                 await db.newUser(interaction.user.id, interaction.member.displayName);
                 await db.addStar(interaction.user.id, interaction.member.displayName, type, 'GOOD');
-                await interaction.reply({ content: `Hey there ${interaction.user}! Looks like it's your first time. Welcome! I have recorded your first star. If you need some clarity of the rules, feel free to use the \`/starboard\` command for more info. This applies for reading and workout stars!` })
+                await interaction.reply({ content: `Hey there ${interaction.user}! Looks like it's your first time. Welcome! I have recorded your first star. If you need some clarity of the rules, feel free to use the \`/starhelp\` command for more info and \`/starboard\` to see the leaderboard. This applies for reading and workout stars!` })
             }
         } else {
             await interaction.reply({ content: 'Oops, you need to use that in `#the-library` or `#diet-slash-exercise`', ephemeral: true })
