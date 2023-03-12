@@ -9,6 +9,8 @@ const sequelize = new Sequelize('database', 'username', 'password', {
     storage: 'database.sqlite'
 });
 
+const Op = Sequelize.Op;
+
 sequelize.authenticate()
     .then(() => console.log("Connected to database."))
     .catch(err => console.log("Error connecting to database.", err));
@@ -203,7 +205,7 @@ const addStar = async (userID, name, type, status) => {
  * Get reading stars.
  */
 const getReadingStars = async () => {
-    let dbStars = await Stars.findAll({ attributes: ['username', 'reading_count', 'reading_streak', 'reading_highest', 'last_reading'], order: [['updatedAt', 'DESC']] });
+    let dbStars = await Stars.findAll({ attributes: ['username', 'reading_count', 'reading_streak', 'reading_highest', 'last_reading'], order: [['updatedAt', 'DESC']], where: { reading_count: { [Op.gt]: 0 } } });
     let starsUsers = dbStars.map(e => {
         let str;
         let dbDate = new Date(e.last_reading);
@@ -218,7 +220,6 @@ const getReadingStars = async () => {
  * Get workout stars.
  */
 const getWorkoutStars = async() => {
-    const Op = Sequelize.Op;
     let dbStars = await Stars.findAll({ attributes: ['username', 'workout_count', 'workout_streak', 'workout_highest', 'last_workout'], order: [['updatedAt', 'DESC']], where: { workout_count: { [Op.gt]: 0 } } });
     let starsUsers = dbStars.map(e => {
         let str;
