@@ -1,4 +1,3 @@
-const util = require('./util');
 const dotenv = require('dotenv');
 dotenv.config();
 const fs = require('node:fs');
@@ -42,91 +41,21 @@ fs.writeFile('./commands/list.json', JSON.stringify(list), (err) => {
     if (err) return console.error(err);
 });
 
-// Grab channel IDs
-let channelLibrary;
-let channelWorkout;
+// Load events
+const eventsPath = path.join(__dirname, 'events');
+const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 
-// On startup
-client.on('ready', () => {
-    const date = new Date();
-    const [day, month, year, hours, minutes] = [
-        date.getDate(),
-        date.getMonth(),
-        date.getFullYear(),
-        date.getHours(),
-        date.getMinutes(),
-    ];
-    client.user.setActivity('the mayor', { type: ActivityType.Listening });
-    console.log(`${client.user.tag} online.\n${month+1}/${day}/${year} ${hours}:${minutes}`);
-    channelLibrary = client.channels.cache.find(ch => ch.name === "the-library" && ch.guild.id === process.env.SERVER.toString());
-    channelWorkout = client.channels.cache.find(ch => ch.name === 'diet-slash-exercise' && ch.guild.id === process.env.SERVER.toString());
-});
+for (const file of eventFiles) {
+    const filePath = path.join(eventsPath, file);
+    const event = require(filePath);
 
-// Message posted
-client.on('interactionCreate', async interaction => {
-    if (!interaction.isChatInputCommand()) return;
-
-    const command = interaction.client.commands.get(interaction.commandName);
-
-    if (!command) {
-        console.error(`Invalid command ${interaction.commandName}.`);
-        return;
+    if (event.once) {
+        client.once(event.name, (...args) => event.execute(...args));
+    } else {
+        client.on(event.name, (...args) => event.execute(...args));
     }
+}
 
-    try {
-        await command.execute(interaction);
-    } catch (err) {
-        console.error(err);
-        await interaction.reply({ content: 'Hmmm...there was an error trying to do that command.', ephemeral: true });
-    }
-});
-
-
-// Edited messages
-client.on('messageUpdate', async (msg, newMsg) => {
-    try {
-        let _msg = await msg.toString();
-        let _newMsg = await newMsg.toString();
-        const logchannel = client.channels.cache.find(ch => ch.name === "event-logs" && ch.guild.id === process.env.SERVER.toString());
-        if (msg.author.id === client.user.id) {
-            return;
-        } else {
-            if (_msg === _newMsg) {
-                return;
-            } else {
-                const embed = new EmbedBuilder()
-                    .setColor(0x4781f0)
-                    .setTitle("Message was edited")
-                    .addFields({ name: "Old message", value: util.urlFilter(msg.content) })
-                    .addFields({ name: "New message", value: util.urlFilter(newMsg.content) })
-                    .setFooter({ text: "From #" + msg.channel.name + "\nBy " + msg.author.username });
-                await logchannel.send({ embeds: [embed] });
-            }
-        }
-    } catch (err) {
-        console.log(err);
-    }
-});
-
-// On message delete
-client.on("messageDelete", msg => {
-    try {
-        if (msg.author.id === client.user.id) {
-            return;
-        } else {
-            const logchannel = client.channels.cache.find(ch => ch.name === "event-logs" && ch.guild.id === process.env.SERVER.toString());
-            const embed = new EmbedBuilder()
-                .setColor(0xf16363)
-                .setTitle("Message was deleted")
-                .addFields({ name: "Message", value: util.urlFilter(msg.content) })
-                .setFooter({ text: "From #" + msg.channel.name + "\nBy " + msg.author.username })
-        
-            logchannel.send({ embeds: [embed] });
-        }
-    } catch (err) {
-        console.log(err);
-    }
-})
 
 let quoteCounter = -1;
 let ranQuote = [
@@ -202,3 +131,5 @@ cron.schedule('0 0 6 * * Mon', async () => {
 });
 
 client.login(process.env.TOKEN);
+
+module.exports = client;
