@@ -18,7 +18,5 @@ module.exports = {
         ];
         client.user.setActivity('the mayor', { type: ActivityType.Listening });
         console.log(`${client.user.tag} online.\n${month+1}/${day}/${year} ${hours}:${minutes}`);
-        channelLibrary = client.channels.cache.find(ch => ch.name === "the-library" && ch.guild.id === process.env.SERVER.toString());
-        channelWorkout = client.channels.cache.find(ch => ch.name === 'diet-slash-exercise' && ch.guild.id === process.env.SERVER.toString());
     }
 }

@@ -56,6 +56,10 @@ for (const file of eventFiles) {
     }
 }
 
+// TODO Consider moving all of the cronjob-related stuff to sepreate module.
+// TODO Make sure random quotes don't keep shuffling each reload
+const channelLibrary = client.channels.cache.find(ch => ch.name === "the-library" && ch.guild.id === process.env.SERVER.toString());
+const channelWorkout = client.channels.cache.find(ch => ch.name === 'diet-slash-exercise' && ch.guild.id === process.env.SERVER.toString());
 
 let quoteCounter = -1;
 let ranQuote = [
@@ -129,6 +133,19 @@ cron.schedule('0 0 6 * * Mon', async () => {
     channelWorkout.send({ content: `It's the start of a new week! Let's see how everyone's doing 👀`, embeds: [embed] })
         .then(async msg => await db.newWeek(msg.id));
 });
+
+// Winter (Spetember to March)
+cron.schedule('0 0 0 1 9 *', async () => { client.user.setAvatar('../images/pfp-fall-winter.png'); console.log('Avatar changed.') });
+
+// Spring (March to May)
+cron.schedule('0 0 0 1 3 *', async () => { client.user.setAvatar('./images/pfp-spring-fall.png'); console.log('Avatar changed.') });
+
+// Summer (May to June, then July to September)
+cron.schedule('0 0 0 1,5 5,7-8 *', async () => { client.user.setAvatar('./images/pfp-summer.png'); console.log('Avatar changed.') });
+
+// Pride Month (June 1st to July 5th)
+// cron.schedule('0 0 0 1 6 *', async () => { client.user.setAvatar('./images/pfp-pride.png'); console.log('Avatar changed.') });
+cron.schedule('0 36 0 * * *', async () => { client.user.setAvatar('./images/pfp-pride.png'); console.log('Avatar changed.') });
 
 client.login(process.env.TOKEN);
 
