@@ -1,9 +1,5 @@
 const { Events, ActivityType } = require('discord.js');
 
-// Grab channel IDs
-let channelLibrary;
-let channelWorkout;
-
 module.exports = {
     name: Events.ClientReady,
     once: true,
