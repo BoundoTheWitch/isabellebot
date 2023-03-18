@@ -1,5 +1,5 @@
 const { Events, EmbedBuilder } = require('discord.js');
-const util = require('../util');
+const { urlFilter } = require('../misc /utility');
 
 
 module.exports = {
@@ -14,7 +14,7 @@ module.exports = {
                 const embed = new EmbedBuilder()
                     .setColor(0xf16363)
                     .setTitle("Message was deleted")
-                    .addFields({ name: "Message", value: util.urlFilter(msg.content) })
+                    .addFields({ name: "Message", value: urlFilter(msg.content) })
                     .setFooter({ text: "From #" + msg.channel.name + "\nBy " + msg.author.username })
             
                 logchannel.send({ embeds: [embed] });

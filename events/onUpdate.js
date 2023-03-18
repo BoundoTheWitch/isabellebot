@@ -1,5 +1,5 @@
 const { Events, EmbedBuilder } = require('discord.js');
-const util = require('../util');
+const { urlFilter } = require('../misc /utility');
 
 
 module.exports = {
@@ -17,8 +17,8 @@ module.exports = {
                     const embed = new EmbedBuilder()
                         .setColor(0x4781f0)
                         .setTitle("Message was edited")
-                        .addFields({ name: "Old message", value: util.urlFilter(oldMsg.content) })
-                        .addFields({ name: "New message", value: util.urlFilter(newMsg.content) })
+                        .addFields({ name: "Old message", value: urlFilter(oldMsg.content) })
+                        .addFields({ name: "New message", value: urlFilter(newMsg.content) })
                         .setFooter({ text: "From #" + oldMsg.channel.name + "\nBy " + oldMsg.author.username });
                     await logchannel.send({ embeds: [embed] });
                 }
