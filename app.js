@@ -4,6 +4,7 @@ const fs = require('node:fs');
 const path = require('path');
 const cron = require('node-cron');
 const db = require('./database');
+const songs = require('./misc /songs.json');
 
 // Discord.js
 const { Client, GatewayIntentBits, Collection, ActivityType, EmbedBuilder, MessageManager, Partials } = require('discord.js');
@@ -139,16 +140,28 @@ cron.schedule('0 0 6 * * Mon', async () => {
 });
 
 // Winter (Spetember to March)
-cron.schedule('0 0 0 1 9 *', async () => { client.user.setAvatar('../images/pfp-fall-winter.png'); console.log('Avatar changed.') });
+cron.schedule('0 0 0 1 9 *', async () => { await client.user.setAvatar('../images/pfp-fall-winter.png'); console.log('Avatar changed.') });
 
 // Spring (March to May)
-cron.schedule('0 0 0 1 3 *', async () => { client.user.setAvatar('./images/pfp-spring-fall.png'); console.log('Avatar changed.') });
+cron.schedule('0 0 0 1 3 *', async () => { await client.user.setAvatar('./images/pfp-spring-fall.png'); console.log('Avatar changed.') });
 
 // Summer (May to June, then July to September)
-cron.schedule('0 0 0 1,5 5,7-8 *', async () => { client.user.setAvatar('./images/pfp-summer.png'); console.log('Avatar changed.') });
+cron.schedule('0 0 0 1 5,7-8 *', async () => { await client.user.setAvatar('./images/pfp-summer.png'); console.log('Avatar changed.') });
 
 // Pride Month (June 1st to July 5th)
-cron.schedule('0 0 0 1 6 *', async () => { client.user.setAvatar('./images/pfp-pride.png'); console.log('Avatar changed.') });
+cron.schedule('0 0 0 1 6 *', async () => { await client.user.setAvatar('./images/pfp-pride.png'); console.log('Avatar changed.') });
+
+
+// Random song every 15 minutes
+cron.schedule('0 */15 * * * *', async () => {
+    let ran = Math.floor(Math.random() * songs.list.length);
+    let selectedSong = songs.list[ran];
+    if (selectedSong === "Secret song") {
+        ran = Math.floor(Math.random() * songs.secret.length);
+        selectedSong = songs.secret[ran];
+    }
+    await client.user.setActivity(selectedSong, { type: ActivityType.Listening });
+});
 
 client.login(process.env.TOKEN);
 
