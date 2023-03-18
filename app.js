@@ -144,8 +144,7 @@ cron.schedule('0 0 0 1 3 *', async () => { client.user.setAvatar('./images/pfp-s
 cron.schedule('0 0 0 1,5 5,7-8 *', async () => { client.user.setAvatar('./images/pfp-summer.png'); console.log('Avatar changed.') });
 
 // Pride Month (June 1st to July 5th)
-// cron.schedule('0 0 0 1 6 *', async () => { client.user.setAvatar('./images/pfp-pride.png'); console.log('Avatar changed.') });
-cron.schedule('0 36 0 * * *', async () => { client.user.setAvatar('./images/pfp-pride.png'); console.log('Avatar changed.') });
+cron.schedule('0 0 0 1 6 *', async () => { client.user.setAvatar('./images/pfp-pride.png'); console.log('Avatar changed.') });
 
 client.login(process.env.TOKEN);
 
