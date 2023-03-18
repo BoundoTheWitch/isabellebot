@@ -6,8 +6,12 @@ const cron = require('node-cron');
 const db = require('./database');
 
 // Discord.js
-const { Client, GatewayIntentBits, Collection, ActivityType, EmbedBuilder, MessageManager } = require('discord.js');
+const { Client, GatewayIntentBits, Collection, ActivityType, EmbedBuilder, MessageManager, Partials } = require('discord.js');
 const client = new Client({
+    partials: [
+        Partials.Message,
+        Partials.Channel
+    ],
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
