@@ -281,7 +281,7 @@ module.exports = {
     },
     /**
      * On start of a new week, update workout_highest and workout_streak
-     * @param {*} postID ID of the last reminder post
+     * @param {String} postID ID of the last reminder post
      */
     newWeek: async (postID) => {
         const statements = [];
