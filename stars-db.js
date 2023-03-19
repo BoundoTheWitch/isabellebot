@@ -395,16 +395,31 @@ module.exports = {
      */
     messageUpdated: async (messageId, newMessage) => {
         const date = new Date();
-        const oldMessage = Posts.sync()
+        return Posts.sync()
         .then(() => {
             return Posts.findOne({ where: { message_id: messageId }, raw: true });
         })
-        .then((e) => {
+        .then(e => {
             const old = e.content;
-            Posts.update({ content: newMessage }, { where: { message_id: messageId } });
+            Posts.update({ content: newMessage, date_updated: date.toString() }, { where: { message_id: messageId } });
             return old;
         });
-
-        return oldMessage;
+    },
+    /**
+     * When a message is deleted
+     * Returns original message as string
+     * @param {String} messageId
+     * @returns Original message as string 
+     */
+    messageDeleted: async (messageId) => {
+        return Posts.sync()
+        .then(() => {
+            return Posts.findOne({ where: { message_id: messageId }, raw: true });
+        })
+        .then(e => {
+            const old = e.content;
+            Posts.destroy({ where: { message_id: messageId } });
+            return old;
+        });
     }
 }
