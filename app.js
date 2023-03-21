@@ -197,7 +197,7 @@ cron.schedule('0 0 6 * * Mon', async () => {
         channelWorkout.messages.fetch(lastPost).then(msg => msg.delete());
 
 
-    channelWorkout.send({ content: `It's the start of a new week! Let's see how everyone's doing 👀`, embeds: [embed] })
+    channelWorkout.send({ content: `It's the start of a new week! Let's see how everyone did 👀`, embeds: [embed] })
         .then(async msg => await db.newWeek(msg.id));
 });
 
