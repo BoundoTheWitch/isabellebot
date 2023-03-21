@@ -282,7 +282,7 @@ const newWeek = async (postID) => {
         
         statements.push(sequelize.query(
             `UPDATE Stars
-            SET workout_streak=0, workout_highest=0
+            SET workout_streak=0
             WHERE user_id=${stars[i].user_id};`
         ));
 
