@@ -1,7 +1,6 @@
 const { Events, EmbedBuilder } = require('discord.js');
 const { urlFilter } = require('../misc /utility');
 
-
 module.exports = {
     name: Events.MessageDelete,
     async execute(msg) {
