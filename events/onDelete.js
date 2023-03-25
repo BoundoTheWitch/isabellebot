@@ -10,16 +10,20 @@ module.exports = {
             if (msg.author.id === client.user.id) {
                 return;
             } else {
+                let str;
                 const embed = new EmbedBuilder()
-                .setColor(0xf16363)
-                .setTitle(`Message was deleted`)
+                    .setColor(0xf16363)
+                    .setTitle(`Message was deleted`)
+                    .setFooter({ text: "From #" + msg.channel.name + "\nBy " + msg.author.username });
                 if (msg.content.length > 1024) {
-                    embed.addFields({ name: "Message", value: "Message was too long to log." });
+                    str = msg.content;
                 }
                 else {
                     embed.addFields({ name: "Message", value: urlFilter(msg.content) });
                 }
-                logchannel.send({ embeds: [embed] });
+                await logchannel.send({ embeds: [embed] });
+                if (str)
+                    await logchannel.send(urlFilter(str));
             }
         } catch (err) {
             console.log(err);
