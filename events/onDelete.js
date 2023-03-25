@@ -12,11 +12,14 @@ module.exports = {
                 return;
             } else {
                 const embed = new EmbedBuilder()
-                    .setColor(0xf16363)
-                    .setTitle("Message was deleted")
-                    .addFields({ name: "Message", value: urlFilter(msg.content) })
-                    .setFooter({ text: "From #" + msg.channel.name + "\nBy " + msg.author.username })
-            
+                .setColor(0xf16363)
+                .setTitle(`Message was deleted`)
+                if (msg.content.length > 1024) {
+                    embed.addFields({ name: "Message", value: "Message was too long to log." });
+                }
+                else {
+                    embed.addFields({ name: "Message", value: urlFilter(msg.content) });
+                }
                 logchannel.send({ embeds: [embed] });
             }
         } catch (err) {
