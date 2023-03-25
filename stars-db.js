@@ -61,13 +61,11 @@ const Stars = sequelize.define('stars', {
     workout_placed: DataTypes.INTEGER,
     last_workout: DataTypes.STRING
 });
-Stars.sync();
 
 const StarPosts = sequelize.define('starposts', {
     post_type: DataTypes.STRING,
     post_id: DataTypes.STRING
 });
-StarPosts.sync();
 
 const Users = sequelize.define('users', {
     user_id: DataTypes.STRING,
@@ -87,6 +85,14 @@ const Posts = sequelize.define('posts', {
     date_posted: DataTypes.STRING,
     date_updated: DataTypes.STRING
 });
+
+Stars.sync();
+StarPosts.sync();
+Users.sync();
+Channels.sync();
+Posts.sync();
+
+
 
 module.exports = {    
     /**
