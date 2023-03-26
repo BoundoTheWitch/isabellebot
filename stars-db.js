@@ -73,21 +73,22 @@ const Users = sequelize.define('users', {
 }, { timestamps: false });
 
 const Channels = sequelize.define('channels', {
-    channel_id: DataTypes.STRING,
+    channel_id: {
+        type: DataTypes.STRING,
+        unique: true
+    },
     channel_name: DataTypes.STRING
 })
 
 const Posts = sequelize.define('posts', {
     message_id: DataTypes.STRING,
-    content: DataTypes.STRING(2000),
-    date_posted: DataTypes.STRING,
-    date_updated: DataTypes.STRING
+    user_id: DataTypes.STRING,
+    channel_id: DataTypes.STRING,
+    content: DataTypes.STRING(2000)
 });
 
-Users.belongsTo(Posts);
-Channels.belongsTo(Posts);
-Posts.hasMany(Users);
-Posts.hasMany(Channels);
+Users.belongsTo(Posts, { foreignKey: 'user_id' });
+Posts.hasMany(Users, { foreignKey: 'user_id', targetKey: 'user_id' });
 
 
 sequelize.sync();
@@ -386,18 +387,20 @@ module.exports = {
      * @param {String} message content
      */
     newMessage: async (messageId, channelId, userId, message) => {
-        const date = new Date();
+        const date = new Date().toString();
         Posts.sync()
         .then(() => {
-            Posts.create({ message_id: messageId, channel_id: channelId, user_id: userId, content: message, posted_date: date });
+            Posts.create({ message_id: messageId, channel_id: channelId, user_id: userId, content: message, date_posted: date });
         });
     },
     /**
      * 
-     * @param {Array} arr An array of users including userid and username 
+     * @param {Array} arrUsers An array of users including user_id and username
+     * @param {Array} arrChannels An array of channels including channel_id and channel_name 
      */
-    updateUsers: async (arr) => {
-        Users.bulkCreate(arr, { ignoreDuplicates: true });
+    updateUsersChannels: async (arrUsers, arrChannels) => {
+        Users.bulkCreate(arrUsers, { ignoreDuplicates: true });
+        Channels.bulkCreate(arrChannels, { ignoreDuplicates: true });
     },
     /**
      * When a message is updated.

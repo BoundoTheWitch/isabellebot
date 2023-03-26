@@ -15,15 +15,27 @@ module.exports = {
         ];
 
         const guild = client.guilds.cache.get(process.env.SERVER);
-        let res = await guild.members.fetch();
+        let usr = await guild.members.fetch();
+        let chnl = await guild.channels.fetch();
         let users = [];
-        res.forEach(data => {
+        let channels = [];
+
+
+
+        usr.forEach(data => {
             if (data.user.bot) return;
             else
                 users.push({ 'user_id': data.user.id, 'username': data.user.username });
         });
 
-        await db.updateUsers(users);
+        chnl.forEach(data => {
+            if (data.type !== 0) return;
+            else
+                channels.push({ 'channel_id': data.id, 'channel_name': data.name });
+        });
+
+        await db.updateUsersChannels(users, channels);
+
 
         console.log(`${client.user.tag} online.\n${month}/${day}/${year} ${hours}:${minutes}`);
     }
