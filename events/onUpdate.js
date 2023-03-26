@@ -7,7 +7,7 @@ module.exports = {
         const client = require('../app');
         const logchannel = await client.channels.cache.find(ch => ch.name === "event-logs" && ch.guild.id === process.env.SERVER.toString());
         try {
-            if (oldMsg.author.id === client.user.id) {
+            if (oldMsg.author.bot) {
                 return;
             } else {
                 if (oldMsg === newMsg) {
