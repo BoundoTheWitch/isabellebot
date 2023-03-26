@@ -9,8 +9,8 @@ module.exports = {
         const msgContent = message.content.toString();
         const userId = message.member.id;
         const channelId = message.channelId;
-        
-        if (userId === client.user.id)  // If message was not from the bot
+
+        if (userId === client.user.id || message.author.bot)  // If message was not from the bot
             return;
 
         db.newMessage(msgId, channelId, userId, msgContent);
