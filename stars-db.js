@@ -70,7 +70,7 @@ const StarPosts = sequelize.define('starposts', {
 const Users = sequelize.define('users', {
     user_id: DataTypes.STRING,
     username: DataTypes.STRING
-});
+}, { timestamps: false });
 
 const Channels = sequelize.define('channels', {
     channel_id: DataTypes.STRING,
@@ -79,18 +79,18 @@ const Channels = sequelize.define('channels', {
 
 const Posts = sequelize.define('posts', {
     message_id: DataTypes.STRING,
-    channel_id: DataTypes.STRING,
-    user_id: DataTypes.STRING,
     content: DataTypes.STRING(2000),
     date_posted: DataTypes.STRING,
     date_updated: DataTypes.STRING
 });
 
-Stars.sync();
-StarPosts.sync();
-Users.sync();
-Channels.sync();
-Posts.sync();
+Users.belongsTo(Posts);
+Channels.belongsTo(Posts);
+Posts.hasMany(Users);
+Posts.hasMany(Channels);
+
+
+sequelize.sync();
 
 
 
@@ -391,6 +391,13 @@ module.exports = {
         .then(() => {
             Posts.create({ message_id: messageId, channel_id: channelId, user_id: userId, content: message, posted_date: date });
         });
+    },
+    /**
+     * 
+     * @param {Array} arr An array of users including userid and username 
+     */
+    updateUsers: async (arr) => {
+        Users.bulkCreate(arr, { ignoreDuplicates: true });
     },
     /**
      * When a message is updated.
