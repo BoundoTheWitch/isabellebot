@@ -376,10 +376,10 @@ module.exports = {
     },
     /**
      * When a message is updated.
-     * Returns old message as string
+     * Returns old message as string or blank if there's nothing
      * @param {String} messageId 
      * @param {String} newMessage 
-     * @returns Old message as string
+     * @returns String (old message)
      */
     messageUpdated: async (messageId, newMessage) => {
         const date = new Date();
@@ -395,9 +395,9 @@ module.exports = {
     },
     /**
      * When a message is deleted
-     * Returns original message as string
+     * Returns original message as string or blank if there's nothing
      * @param {String} messageId
-     * @returns Object { username, channel, content } | Boolean
+     * @returns Object { username, channel, content }
      */
     messageDeleted: async (messageId) => {
         return await Posts.sync()
@@ -405,7 +405,7 @@ module.exports = {
                 return Posts.findOne({ where: { message_id: messageId }, raw: true });
             })
             .then(e => {
-                // Posts.destroy({ where: { message_id: messageId } });
+                Posts.destroy({ where: { message_id: messageId } });
                 if (e)
                     return { 'username': e.username, 'channel': e.channel, 'content': e.content };
                 else
