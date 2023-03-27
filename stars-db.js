@@ -67,33 +67,14 @@ const StarPosts = sequelize.define('starposts', {
     post_id: DataTypes.STRING
 });
 
-const Users = sequelize.define('users', {
-    user_id: DataTypes.STRING,
-    username: DataTypes.STRING
-}, { timestamps: false });
-
-const Channels = sequelize.define('channels', {
-    channel_id: {
-        type: DataTypes.STRING,
-        unique: true
-    },
-    channel_name: DataTypes.STRING
-})
-
 const Posts = sequelize.define('posts', {
     message_id: DataTypes.STRING,
-    user_id: DataTypes.STRING,
-    channel_id: DataTypes.STRING,
+    username: DataTypes.STRING,
+    channel: DataTypes.STRING,
     content: DataTypes.STRING(2000)
 });
 
-Users.belongsTo(Posts, { foreignKey: 'user_id' });
-Posts.hasMany(Users, { foreignKey: 'user_id', targetKey: 'user_id' });
-
-
 sequelize.sync();
-
-
 
 module.exports = {    
     /**
@@ -382,25 +363,16 @@ module.exports = {
     /**
      * Add to Posts database
      * @param {String} messageId message_id
-     * @param {String} channelId channel_id
-     * @param {String} userId user_id
+     * @param {String} channelname channel_id
+     * @param {String} username username
      * @param {String} message content
      */
-    newMessage: async (messageId, channelId, userId, message) => {
+    newMessage: async (messageId, channelname, username, message) => {
         const date = new Date().toString();
         Posts.sync()
         .then(() => {
-            Posts.create({ message_id: messageId, channel_id: channelId, user_id: userId, content: message, date_posted: date });
+            Posts.create({ message_id: messageId, channelname: channelname, username: username, content: message, date_posted: date });
         });
-    },
-    /**
-     * 
-     * @param {Array} arrUsers An array of users including user_id and username
-     * @param {Array} arrChannels An array of channels including channel_id and channel_name 
-     */
-    updateUsersChannels: async (arrUsers, arrChannels) => {
-        Users.bulkCreate(arrUsers, { ignoreDuplicates: true });
-        Channels.bulkCreate(arrChannels, { ignoreDuplicates: true });
     },
     /**
      * When a message is updated.
@@ -425,17 +397,16 @@ module.exports = {
      * When a message is deleted
      * Returns original message as string
      * @param {String} messageId
-     * @returns Original message as string 
+     * @returns Object { user_id, channel_id, content }
      */
     messageDeleted: async (messageId) => {
-        return Posts.sync()
-        .then(() => {
-            return Posts.findOne({ where: { message_id: messageId }, raw: true });
-        })
-        .then(e => {
-            const old = e.content;
-            Posts.destroy({ where: { message_id: messageId } });
-            return old;
-        });
+        return await Posts.sync()
+            .then(() => {
+                return Posts.findOne({ where: { message_id: messageId }, raw: true });
+            })
+            .then(e => {
+                // Posts.destroy({ where: { message_id: messageId } });
+                return { 'user_id': e.user_id, 'channel_id': e.channel_id, 'content': e.content };
+            });
     }
 }
