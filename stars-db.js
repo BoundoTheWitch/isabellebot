@@ -388,10 +388,13 @@ module.exports = {
             return Posts.findOne({ where: { message_id: messageId }, raw: true });
         })
         .then(e => {
-            const old = e.content;
-            Posts.update({ content: newMessage, date_updated: date.toString() }, { where: { message_id: messageId } });
-            return old;
-        });
+            Posts.update({ content: newMessage }, { where: { message_id: messageId } });
+            if (e)
+                return { 'username': e.username, 'channel': e.channel, 'oldmessage': e.content };
+            else
+                return;
+        })
+        .catch(err => console.error(err));
     },
     /**
      * When a message is deleted
@@ -410,8 +413,7 @@ module.exports = {
                     return { 'username': e.username, 'channel': e.channel, 'content': e.content };
                 else
                     return;
-            }).catch(err => {
-                console.error("Error: ", err);
-            });
+            })
+            .catch(err => console.error("Error: ", err));
     }
 }
