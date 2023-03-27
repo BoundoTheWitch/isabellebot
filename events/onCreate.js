@@ -7,12 +7,12 @@ module.exports = {
         const client = require('../app');
         const msgId = message.id;
         const msgContent = message.content.toString();
-        const userId = message.member.id;
-        const channelId = message.channelId;
+        const username = message.author.username;
+        const channelname = message.channel.name;
 
         if (message.author.bot)
             return;
 
-        db.newMessage(msgId, channelId, userId, msgContent);
+        db.newMessage(msgId, channelname, username, msgContent);
     }
 }

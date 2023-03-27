@@ -364,14 +364,14 @@ module.exports = {
      * Add to Posts database
      * @param {String} messageId message_id
      * @param {String} channelname channel_id
-     * @param {String} username username
+     * @param {String} user username
      * @param {String} message content
      */
-    newMessage: async (messageId, channelname, username, message) => {
+    newMessage: async (messageId, channelname, user, message) => {
         const date = new Date().toString();
         Posts.sync()
         .then(() => {
-            Posts.create({ message_id: messageId, channelname: channelname, username: username, content: message, date_posted: date });
+            Posts.create({ message_id: messageId, channel: channelname, username: user, content: message, date_posted: date });
         });
     },
     /**
@@ -397,7 +397,7 @@ module.exports = {
      * When a message is deleted
      * Returns original message as string
      * @param {String} messageId
-     * @returns Object { user_id, channel_id, content }
+     * @returns Object { username, channel, content } | Boolean
      */
     messageDeleted: async (messageId) => {
         return await Posts.sync()
@@ -406,7 +406,12 @@ module.exports = {
             })
             .then(e => {
                 // Posts.destroy({ where: { message_id: messageId } });
-                return { 'user_id': e.user_id, 'channel_id': e.channel_id, 'content': e.content };
+                if (e)
+                    return { 'username': e.username, 'channel': e.channel, 'content': e.content };
+                else
+                    return;
+            }).catch(err => {
+                console.error("Error: ", err);
             });
     }
 }
