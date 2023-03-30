@@ -32,7 +32,7 @@ module.exports = {
                         else
                             outcome = `💪 Thank you for leaving your star today! 💪\n`;
                         
-                        await interaction.reply({ content: `${outcome}*(Don't forget to drink some water 🥤)*` });
+                        await interaction.reply({ content: `${outcome}` });
                     }
                 }
             } else {
