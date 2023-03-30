@@ -82,7 +82,7 @@ let ranQuote = [
     "🎶Here comes the sun\n*(Doo-d-doo-doo)*\nHere comes the sun\nAnd I say, **\"It's a new day!\"**🎶",
     "They say the island is just a game.\nAnd everything we say? Or do?\nIt's just to amuse somebody else!\n...I'm sorry, I don't know what came over me. It's a new day!",
     "It's a new day! Let's get that reading...did I do the meme right?",
-    "Good morning, everyone!\nRight now on *undefined*, it's *NaN AM* on *[object Object]*.\nHmmm...There really isn't any news to speak of today...\nError: Cannot find module './dryer/socks",
+    "Good morning, everyone!\nRight now on *undefined*, it's *NaN AM* on *[object Object]*.\nHmmm...There really isn't any news to speak of today...\nError: Cannot find module './dryer/socks'",
     "ModuleNotFoundError: No module named 'quotes'\nJust kidding, I don't speak Python! It's a new *[object Object]*!",
     "Hello everyone! It's the day of a new start.\nWait, that wasn't right.",
     "*cough cough*\nS-sorry, my voice is still a bit raspy from karaoke last night. It's a new day!\n*cough cough*",
