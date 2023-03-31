@@ -11,47 +11,25 @@ module.exports = {
         const details = await messageDeleted(msg.id);
         const embed = new EmbedBuilder()
             .setColor(0xf16363)
-            .setTitle(`Message was deleted`);
+            .setTitle(`Message was deleted`)
+            .setFooter({ text: `From #${details.channel}\nBy ${details.username}` });
+        const msgLength = details.content.length;
+        const maxChars = msgLength > 1024 ? true : false;
+
         try {
-            if (msg.partial) {
-                if (details) {
-                    if (details.content.length > 1024)
-                        str = details.content;
-                    else {
-                        embed
-                            .addFields({ name: 'Message', value: urlFilter(details.content) })
-                            .setFooter({ text: `From #${details.channel}\nBy ${details.username}\n(Older message, some info may not be accurate)` });
-                            
-                            await logchannel.send({ embeds: [embed] })
-        
-                            if (str)
-                                await logchannel.send(urlFilter(str));
-                    }
-                } else {
-                    embed
-                        .addFields({ name: 'Message too old', value: `The deleted message was too old as it was not in the cache or in the database.\nFor reference the ID of the message is *${msg.id}*` });
-                    await logchannel.send({ embeds: [embed] });
-                }
+            if (maxChars) {
+                let previewStart = urlFilter(details.content.slice(0, 100));
+                let previewEnd = urlFilter(details.content.slice(msgLength - 100, msgLength));
+                embed
+                    .addFields({ name: 'Long version', value: `The message deleted was a bit long. Here's a snippet of what that message was.` })
+                    .addFields({ name: 'Preview', value: `${previewStart}\n(...)\n${previewEnd}` });
             } else {
-                if (msg.author.bot)
-                    return;
-                else {
-                    // TODO Change so that it displays as image instead of a second message
-                    if (msg.content.length > 1024)
-                        str = msg.content;
-                    else {
-                        embed
-                            .addFields({ name: 'Message', value: urlFilter(msg.content) })
-                            .setFooter({ text: `From #${msg.channel.name}\nBy ${msg.author.username}` });
-                        
-                        await logchannel.send({ embeds: [embed] });
-                        if (str)
-                            await logchannel.send(urlFilter(str));
-                    }
-                }
+                embed
+                    .addFields({ name: 'Message Deleted', value: urlFilter(details.content) })
             }
+            await logchannel.send({ embeds: [embed] });
         } catch (err) {
-            console.log(err);
+            console.error("Something went wrong when a message was deleted", err);
         }
     }
 }
