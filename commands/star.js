@@ -5,10 +5,15 @@ const { currentTime } = require('../misc /utility');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('star')
-        .setDescription('Leave your star for your streak in #the-library, or in #diet-slash-exercise'),
+        .setDescription('Leave your star for your streak in #the-library, or in #diet-slash-exercise')
+        .addBooleanOption(option =>
+            option
+                .setName('private')
+                .setDescription('If you want to keep your star private.')),
     async execute(interaction) {
         const currUser = await db.checkUser(interaction.user.id);
         const currChannel = interaction.channel.name;
+        const private = interaction.options.getBoolean('private');
 
         if (currChannel === 'the-library' || currChannel === 'diet-slash-exercise') {
             const type = currChannel === "the-library" ? "READING" : "WORKOUT";
@@ -21,7 +26,7 @@ module.exports = {
                 else {
                     if (currChannel === 'the-library') {
                         await db.addStar(interaction.user.id, interaction.member.displayName, 'READING', status);
-                        await interaction.reply({ content: `⭐ Thank you for leaving your star today! ⭐` });
+                        await interaction.reply({ content: `⭐ Thank you for leaving your star today! ⭐`, ephemeral: private });
                     } else if (currChannel === 'diet-slash-exercise') {
                         let outcome;
 
@@ -32,7 +37,7 @@ module.exports = {
                         else
                             outcome = `💪 Thank you for leaving your star today! 💪\n`;
                         
-                        await interaction.reply({ content: `${outcome}` });
+                        await interaction.reply({ content: `${outcome}`, ephemeral: private });
                     }
                 }
             } else {
