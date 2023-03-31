@@ -382,7 +382,6 @@ module.exports = {
      * @returns String (old message)
      */
     messageUpdated: async (messageId, newMessage) => {
-        const date = new Date();
         return Posts.sync()
         .then(() => {
             return Posts.findOne({ where: { message_id: messageId }, raw: true });
@@ -394,7 +393,7 @@ module.exports = {
             else
                 return;
         })
-        .catch(err => console.error(err));
+        .catch(err => console.error("Error when updating database (messageUpdated)", err));
     },
     /**
      * When a message is deleted
