@@ -91,7 +91,8 @@ module.exports = {
             .then(data => {
                 if (data) return true;
                 else return false;
-            });
+            })
+            .catch(err => console.error("Error happened when checking for users.", err));
         return res;
     },
     /**
@@ -102,7 +103,7 @@ module.exports = {
     newUser: async (userID, name) => {
         Stars.sync()
             .then(() => Stars.create({ user_id: userID, username: name }))
-            .catch(err => console.error(err));
+            .catch(err => console.error("Error happened with adding a new user.", err));
     },
     /**
      * Checks to see if user already left star on the same day.
@@ -130,7 +131,7 @@ module.exports = {
                     return "GOOD";
             }
         })
-        .catch(err => console.error("Error", err));
+        .catch(err => console.error("Error happened with checking the user's star", err));
         return res;
     },
     /**
@@ -155,7 +156,7 @@ module.exports = {
                 }
                 else return false;
             })
-            .catch(err => console.error("Error", err));
+            .catch(err => console.error("Error happened when checking for super star", err));
         return res;
     },
     /**
@@ -200,7 +201,8 @@ module.exports = {
                 } else {
                     console.error("No star type included");
                 }
-            });
+            })
+            .catch(err => console.error("Error when adding a star.", err));
         console.log(`Star added:\n${name} - ${type} - ${status}`);
     },
     /**
@@ -306,7 +308,8 @@ module.exports = {
             })
             .then(data => {
                 return data.post_id;
-            });
+            })
+            .catch(err => console.error("Error when getting last post for daily or weekly star updates.", err));
     
         return res;
     },
@@ -343,7 +346,7 @@ module.exports = {
                     last_workout: workoutDate
                 });
             })
-            .catch(err => console.error("Error", err));
+            .catch(err => console.error("Error when trying to manually add into database.", err));
     },
     /**
      * Console log everything from the database
@@ -358,7 +361,7 @@ module.exports = {
                 console.log(`'${e.user_id}', '${e.username}', ${e.reading_count}, ${e.reading_streak}, ${e.reading_highest}, '${e.last_reading}', ${e.workout_count}, ${e.workout_streak}, ${e.workout_highest}, '${e.last_workout}'`);
             })
         })
-        .catch(err => console.error(err));
+        .catch(err => console.error("Error when trying to get everything.", err));
     },
     /**
      * Add to Posts database
@@ -372,7 +375,8 @@ module.exports = {
         Posts.sync()
         .then(() => {
             Posts.create({ message_id: messageId, channel: channelname, username: user, content: message, date_posted: date });
-        });
+        })
+        .catch(err => console.error("Error when trying to write to 'posts' table.", err));
     },
     /**
      * When a message is updated.
@@ -413,6 +417,6 @@ module.exports = {
                 else
                     return;
             })
-            .catch(err => console.error("Error: ", err));
+            .catch(err => console.error("Error when deleting an entry from the database.", err));
     }
 }
