@@ -61,8 +61,6 @@ for (const file of eventFiles) {
     }
 }
 
-// TODO Consider moving all of the cronjob-related stuff to sepreate module.
-// TODO Make sure random quotes don't keep shuffling each reload
 const channelLibrary = client.channels.cache.find(ch => ch.name === "the-library" && ch.guild.id === process.env.SERVER.toString());
 const channelWorkout = client.channels.cache.find(ch => ch.name === 'diet-slash-exercise' && ch.guild.id === process.env.SERVER.toString());
 
