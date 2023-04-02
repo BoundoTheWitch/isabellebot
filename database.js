@@ -71,7 +71,7 @@ const Posts = sequelize.define('posts', {
     message_id: DataTypes.STRING,
     username: DataTypes.STRING,
     channel: DataTypes.STRING,
-    content: DataTypes.STRING(2000)
+    content: DataTypes.STRING(2500)
 });
 
 sequelize.sync();
