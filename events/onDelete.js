@@ -1,6 +1,6 @@
 const { Events, EmbedBuilder, MessageType } = require('discord.js');
 const { urlFilter } = require('../misc /utility');
-const { messageDeleted } = require('../stars-db');
+const { messageDeleted } = require('../database');
 
 module.exports = {
     name: Events.MessageDelete,

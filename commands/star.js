@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const db = require('../stars-db');
+const db = require('../database');
 const { currentTime } = require('../misc /utility');
 
 module.exports = {

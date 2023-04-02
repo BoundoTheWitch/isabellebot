@@ -1,5 +1,4 @@
 const { Events, ActivityType } = require('discord.js');
-const db = require('../stars-db');
 
 module.exports = {
     name: Events.ClientReady,

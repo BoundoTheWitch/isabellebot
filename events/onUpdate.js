@@ -1,6 +1,6 @@
 const { Events, EmbedBuilder } = require('discord.js');
 const { urlFilter } = require('../misc /utility');
-const { messageUpdated } = require('../stars-db');
+const { messageUpdated } = require('../database');
 
 module.exports = {
     name: Events.MessageUpdate,

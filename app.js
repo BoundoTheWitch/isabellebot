@@ -3,7 +3,7 @@ dotenv.config();
 const fs = require('node:fs');
 const path = require('path');
 const cron = require('node-cron');
-const db = require('./stars-db');
+const db = require('./database');
 const songs = require('./misc /songs.json');
 
 // Discord.js

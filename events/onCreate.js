@@ -1,5 +1,5 @@
 const { Events } = require('discord.js');
-const db = require('../stars-db');
+const db = require('../database');
 
 module.exports = {
     name: Events.MessageCreate,
