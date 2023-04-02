@@ -81,7 +81,4 @@ commands/list.json
 # No need to include the test file
 test.js
 
-# This isn't needed either
-lastpost.txt
-
 *.sqlite

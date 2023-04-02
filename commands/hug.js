@@ -7,7 +7,7 @@ module.exports = {
         .addUserOption(option =>
             option
                 .setName('user')
-                .setDescription('(optional) Who you want to give a hug to.')
+                .setDescription('@ Who you want to give a hug to.')
                 .setRequired(false)),
     async execute(interaction) {
         const user = interaction.options.getUser('user');

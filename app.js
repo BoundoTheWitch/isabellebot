@@ -1,14 +1,18 @@
-const util = require('./util');
 const dotenv = require('dotenv');
 dotenv.config();
 const fs = require('node:fs');
 const path = require('path');
 const cron = require('node-cron');
 const db = require('./database');
+const songs = require('./misc /songs.json');
 
 // Discord.js
-const { Client, GatewayIntentBits, Collection, ActivityType, EmbedBuilder, MessageManager } = require('discord.js');
+const { Client, GatewayIntentBits, Collection, ActivityType, EmbedBuilder, MessageManager, Partials } = require('discord.js');
 const client = new Client({
+    partials: [
+        Partials.Message,
+        Partials.Channel
+    ],
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
@@ -42,91 +46,23 @@ fs.writeFile('./commands/list.json', JSON.stringify(list), (err) => {
     if (err) return console.error(err);
 });
 
-// Grab channel IDs
-let channelLibrary;
-let channelWorkout;
+// Load events
+const eventsPath = path.join(__dirname, 'events');
+const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 
-// On startup
-client.on('ready', () => {
-    const date = new Date();
-    const [day, month, year, hours, minutes] = [
-        date.getDate(),
-        date.getMonth(),
-        date.getFullYear(),
-        date.getHours(),
-        date.getMinutes(),
-    ];
-    client.user.setActivity('the mayor', { type: ActivityType.Listening });
-    console.log(`${client.user.tag} online.\n${month+1}/${day}/${year} ${hours}:${minutes}`);
-    channelLibrary = client.channels.cache.find(ch => ch.name === "the-library" && ch.guild.id === process.env.SERVER.toString());
-    channelWorkout = client.channels.cache.find(ch => ch.name === 'diet-slash-exercise' && ch.guild.id === process.env.SERVER.toString());
-});
+for (const file of eventFiles) {
+    const filePath = path.join(eventsPath, file);
+    const event = require(filePath);
 
-// Message posted
-client.on('interactionCreate', async interaction => {
-    if (!interaction.isChatInputCommand()) return;
-
-    const command = interaction.client.commands.get(interaction.commandName);
-
-    if (!command) {
-        console.error(`Invalid command ${interaction.commandName}.`);
-        return;
+    if (event.once) {
+        client.once(event.name, (...args) => event.execute(...args));
+    } else {
+        client.on(event.name, (...args) => event.execute(...args));
     }
+}
 
-    try {
-        await command.execute(interaction);
-    } catch (err) {
-        console.error(err);
-        await interaction.reply({ content: 'Hmmm...there was an error trying to do that command.', ephemeral: true });
-    }
-});
-
-
-// Edited messages
-client.on('messageUpdate', async (msg, newMsg) => {
-    try {
-        let _msg = await msg.toString();
-        let _newMsg = await newMsg.toString();
-        const logchannel = client.channels.cache.find(ch => ch.name === "event-logs" && ch.guild.id === process.env.SERVER.toString());
-        if (msg.author.id === client.user.id) {
-            return;
-        } else {
-            if (_msg === _newMsg) {
-                return;
-            } else {
-                const embed = new EmbedBuilder()
-                    .setColor(0x4781f0)
-                    .setTitle("Message was edited")
-                    .addFields({ name: "Old message", value: util.urlFilter(msg.content) })
-                    .addFields({ name: "New message", value: util.urlFilter(newMsg.content) })
-                    .setFooter({ text: "From #" + msg.channel.name + "\nBy " + msg.author.username });
-                await logchannel.send({ embeds: [embed] });
-            }
-        }
-    } catch (err) {
-        console.log(err);
-    }
-});
-
-// On message delete
-client.on("messageDelete", msg => {
-    try {
-        if (msg.author.id === client.user.id) {
-            return;
-        } else {
-            const logchannel = client.channels.cache.find(ch => ch.name === "event-logs" && ch.guild.id === process.env.SERVER.toString());
-            const embed = new EmbedBuilder()
-                .setColor(0xf16363)
-                .setTitle("Message was deleted")
-                .addFields({ name: "Message", value: util.urlFilter(msg.content) })
-                .setFooter({ text: "From #" + msg.channel.name + "\nBy " + msg.author.username })
-        
-            logchannel.send({ embeds: [embed] });
-        }
-    } catch (err) {
-        console.log(err);
-    }
-})
+const channelLibrary = client.channels.cache.find(ch => ch.name === "the-library" && ch.guild.id === process.env.SERVER.toString());
+const channelWorkout = client.channels.cache.find(ch => ch.name === 'diet-slash-exercise' && ch.guild.id === process.env.SERVER.toString());
 
 let quoteCounter = -1;
 let ranQuote = [
@@ -144,7 +80,7 @@ let ranQuote = [
     "🎶Here comes the sun\n*(Doo-d-doo-doo)*\nHere comes the sun\nAnd I say, **\"It's a new day!\"**🎶",
     "They say the island is just a game.\nAnd everything we say? Or do?\nIt's just to amuse somebody else!\n...I'm sorry, I don't know what came over me. It's a new day!",
     "It's a new day! Let's get that reading...did I do the meme right?",
-    "Good morning, everyone!\nRight now on *undefined*, it's *NaN AM* on *[object Object]*.\nHmmm...There really isn't any news to speak of today...\nError: Cannot find module './dryer/socks",
+    "Good morning, everyone!\nRight now on *undefined*, it's *NaN AM* on *[object Object]*.\nHmmm...There really isn't any news to speak of today...\nError: Cannot find module './dryer/socks'",
     "ModuleNotFoundError: No module named 'quotes'\nJust kidding, I don't speak Python! It's a new *[object Object]*!",
     "Hello everyone! It's the day of a new start.\nWait, that wasn't right.",
     "*cough cough*\nS-sorry, my voice is still a bit raspy from karaoke last night. It's a new day!\n*cough cough*",
@@ -201,4 +137,30 @@ cron.schedule('0 0 6 * * Mon', async () => {
         .then(async msg => await db.newWeek(msg.id));
 });
 
+// Winter (Spetember to March)
+cron.schedule('0 0 0 1 9 *', async () => { await client.user.setAvatar('../images/pfp-fall-winter.png'); console.log('Avatar changed.') });
+
+// Spring (March to May)
+cron.schedule('0 0 0 1 3 *', async () => { await client.user.setAvatar('./images/pfp-spring-fall.png'); console.log('Avatar changed.') });
+
+// Summer (May to June, then July to September)
+cron.schedule('0 0 0 1 5,7-8 *', async () => { await client.user.setAvatar('./images/pfp-summer.png'); console.log('Avatar changed.') });
+
+// Pride Month (June to July)
+cron.schedule('0 0 0 1 6 *', async () => { await client.user.setAvatar('./images/pfp-pride.png'); console.log('Avatar changed.') });
+
+
+// Random song every 15 minutes
+cron.schedule('0 */15 * * * *', async () => {
+    let ran = Math.floor(Math.random() * songs.list.length);
+    let selectedSong = songs.list[ran];
+    if (selectedSong === "Secret song") {
+        ran = Math.floor(Math.random() * songs.secret.length);
+        selectedSong = songs.secret[ran];
+    }
+    await client.user.setActivity(selectedSong, { type: ActivityType.Listening });
+});
+
 client.login(process.env.TOKEN);
+
+module.exports = client;
