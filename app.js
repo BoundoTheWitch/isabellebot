@@ -146,7 +146,7 @@ cron.schedule('0 0 0 1 3 *', async () => { await client.user.setAvatar('./images
 // Summer (May to June, then July to September)
 cron.schedule('0 0 0 1 5,7-8 *', async () => { await client.user.setAvatar('./images/pfp-summer.png'); console.log('Avatar changed.') });
 
-// Pride Month (June 1st to July 5th)
+// Pride Month (June to July)
 cron.schedule('0 0 0 1 6 *', async () => { await client.user.setAvatar('./images/pfp-pride.png'); console.log('Avatar changed.') });
 
 
