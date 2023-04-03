@@ -150,8 +150,8 @@ cron.schedule('0 0 0 1 5,7-8 *', async () => { await client.user.setAvatar('./im
 cron.schedule('0 0 0 1 6 *', async () => { await client.user.setAvatar('./images/pfp-pride.png'); console.log('Avatar changed.') });
 
 
-// Random song every 15 minutes
-cron.schedule('0 */15 * * * *', async () => {
+// Random song every 30 minutes
+cron.schedule('0 */30 * * * *', async () => {
     let ran = Math.floor(Math.random() * songs.list.length);
     let selectedSong = songs.list[ran];
     if (selectedSong === "Secret song") {
