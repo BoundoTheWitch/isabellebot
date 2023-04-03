@@ -138,7 +138,7 @@ cron.schedule('0 0 6 * * Mon', async () => {
 });
 
 // Winter (Spetember to March)
-cron.schedule('0 0 0 1 9 *', async () => { await client.user.setAvatar('../images/pfp-fall-winter.png'); console.log('Avatar changed.') });
+cron.schedule('0 0 0 1 9 *', async () => { await client.user.setAvatar('./images/pfp-fall-winter.png'); console.log('Avatar changed.') });
 
 // Spring (March to May)
 cron.schedule('0 0 0 1 3 *', async () => { await client.user.setAvatar('./images/pfp-spring-fall.png'); console.log('Avatar changed.') });
