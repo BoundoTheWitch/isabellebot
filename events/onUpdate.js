@@ -15,6 +15,9 @@ module.exports = {
 
         try {
             if (details) {
+                if (details.oldmessage === newMsg.content)
+                    return;
+                
                 const maxChars = details.oldmessage.length > 1024 || newMsg.content.length > 1024 ? true : false;
                 embed.setFooter({ text: `From #${details.channel}\nBy ${details.username}` });
 
