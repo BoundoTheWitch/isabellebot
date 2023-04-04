@@ -29,8 +29,9 @@ module.exports = {
                         .addFields({ name: 'Message Deleted', value: urlFilter(details.content) })
                 }
             } else {
-                embed
-                    .addFields({ name: 'Too Old', value: `A message was deleted, but it was from before what the database recorded.\nFor reference, the ID was *${msg.id}*` });
+                return;
+                // embed
+                //     .addFields({ name: 'Too Old', value: `A message was deleted, but it was from before what the database recorded.\nFor reference, the ID was *${msg.id}*` });
             }
 
             await logchannel.send({ embeds: [embed] });
