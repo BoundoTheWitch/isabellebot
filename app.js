@@ -61,8 +61,15 @@ for (const file of eventFiles) {
     }
 }
 
-const channelLibrary = client.channels.cache.find(ch => ch.name === "the-library" && ch.guild.id === process.env.SERVER.toString());
-const channelWorkout = client.channels.cache.find(ch => ch.name === 'diet-slash-exercise' && ch.guild.id === process.env.SERVER.toString());
+// TODO come up with a better solution
+let channelLibrary = client.channels.cache.find(ch => ch.name === "the-library" && ch.guild.id === process.env.SERVER.toString());
+let channelWorkout = client.channels.cache.find(ch => ch.name === 'diet-slash-exercise' && ch.guild.id === process.env.SERVER.toString());
+
+setTimeout(() => {
+    channelLibrary = client.channels.cache.find(ch => ch.name === "the-library" && ch.guild.id === process.env.SERVER.toString());
+    channelWorkout = client.channels.cache.find(ch => ch.name === 'diet-slash-exercise' && ch.guild.id === process.env.SERVER.toString());
+}, 1000);
+// TODO ------------------------------
 
 let quoteCounter = -1;
 let ranQuote = [
@@ -117,7 +124,6 @@ cron.schedule('0 0 6 * * *', async () => {
         .then(async msg => await db.newDay(msg.id));
 
 });
-
 
 // Runs every week on Monday at 6am
 cron.schedule('0 0 6 * * Mon', async () => {
