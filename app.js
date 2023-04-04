@@ -61,8 +61,15 @@ for (const file of eventFiles) {
     }
 }
 
-const channelLibrary = client.channels.cache.find(ch => ch.name === "the-library" && ch.guild.id === process.env.SERVER.toString());
-const channelWorkout = client.channels.cache.find(ch => ch.name === 'diet-slash-exercise' && ch.guild.id === process.env.SERVER.toString());
+// TODO come up with a better solution
+let channelLibrary = client.channels.cache.find(ch => ch.name === "the-library" && ch.guild.id === process.env.SERVER.toString());
+let channelWorkout = client.channels.cache.find(ch => ch.name === 'diet-slash-exercise' && ch.guild.id === process.env.SERVER.toString());
+
+setTimeout(() => {
+    channelLibrary = client.channels.cache.find(ch => ch.name === "the-library" && ch.guild.id === process.env.SERVER.toString());
+    channelWorkout = client.channels.cache.find(ch => ch.name === 'diet-slash-exercise' && ch.guild.id === process.env.SERVER.toString());
+}, 1000);
+// TODO ------------------------------
 
 let quoteCounter = -1;
 let ranQuote = [
@@ -118,7 +125,6 @@ cron.schedule('0 0 6 * * *', async () => {
 
 });
 
-
 // Runs every week on Monday at 6am
 cron.schedule('0 0 6 * * Mon', async () => {
     const lastPost = await db.getLastPost("WORKOUT");
@@ -138,7 +144,7 @@ cron.schedule('0 0 6 * * Mon', async () => {
 });
 
 // Winter (Spetember to March)
-cron.schedule('0 0 0 1 9 *', async () => { await client.user.setAvatar('../images/pfp-fall-winter.png'); console.log('Avatar changed.') });
+cron.schedule('0 0 0 1 9 *', async () => { await client.user.setAvatar('./images/pfp-fall-winter.png'); console.log('Avatar changed.') });
 
 // Spring (March to May)
 cron.schedule('0 0 0 1 3 *', async () => { await client.user.setAvatar('./images/pfp-spring-fall.png'); console.log('Avatar changed.') });
@@ -150,8 +156,8 @@ cron.schedule('0 0 0 1 5,7-8 *', async () => { await client.user.setAvatar('./im
 cron.schedule('0 0 0 1 6 *', async () => { await client.user.setAvatar('./images/pfp-pride.png'); console.log('Avatar changed.') });
 
 
-// Random song every 15 minutes
-cron.schedule('0 */15 * * * *', async () => {
+// Random song every 30 minutes
+cron.schedule('0 */30 * * * *', async () => {
     let ran = Math.floor(Math.random() * songs.list.length);
     let selectedSong = songs.list[ran];
     if (selectedSong === "Secret song") {
