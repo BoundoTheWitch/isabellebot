@@ -62,8 +62,7 @@ for (const file of eventFiles) {
 }
 
 // TODO come up with a better solution
-let channelLibrary = client.channels.cache.find(ch => ch.name === "the-library" && ch.guild.id === process.env.SERVER.toString());
-let channelWorkout = client.channels.cache.find(ch => ch.name === 'diet-slash-exercise' && ch.guild.id === process.env.SERVER.toString());
+let channelLibrary, channelWorkout
 
 setTimeout(() => {
     channelLibrary = client.channels.cache.find(ch => ch.name === "the-library" && ch.guild.id === process.env.SERVER.toString());
