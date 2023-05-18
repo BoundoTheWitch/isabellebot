@@ -1,5 +1,5 @@
 const { Events, EmbedBuilder } = require('discord.js');
-const { urlFilter } = require('../misc /utility');
+const { urlFilter } = require('../misc/utility');
 const { messageDeleted } = require('../database');
 
 module.exports = {
