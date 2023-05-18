@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const path = require('path');
 const cron = require('node-cron');
 const db = require('./database');
-const songs = require('./misc /songs.json');
+const songs = require('./misc/songs.json');
 
 // Discord.js
 const { Client, GatewayIntentBits, Collection, ActivityType, EmbedBuilder, MessageManager, Partials } = require('discord.js');
