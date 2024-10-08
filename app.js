@@ -61,14 +61,23 @@ for (const file of eventFiles) {
     }
 }
 
-// TODO come up with a better solution
-let channelLibrary, channelWorkout
-
+// TODO: Maybe add way to call channel ID from onReady.js file in the future, yeah?
+let channelLibrary, channelWorkout;
 setTimeout(() => {
-    channelLibrary = client.channels.cache.find(ch => ch.name === "the-library" && ch.guild.id === process.env.SERVER.toString());
-    channelWorkout = client.channels.cache.find(ch => ch.name === 'diet-slash-exercise' && ch.guild.id === process.env.SERVER.toString());
+    let channelCache = client.channels.cache;
+    channelCache.forEach((ch) => {
+        let name = ch.name;
+        if (name.includes('the-library')) {
+            if (!channelLibrary)
+                channelLibrary = ch.id;
+        }
+        if (name.includes('diet-slash-exercise')) {
+            if (!channelWorkout)
+                channelWorkout = ch.id;
+        }
+    });
+    
 }, 1000);
-// TODO ------------------------------
 
 let quoteCounter = -1;
 let ranQuote = [
