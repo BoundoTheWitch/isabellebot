@@ -29,5 +29,4 @@ const currentTime = () => {
     return `${hour}:${mins}${ampm}`;
 }
 
-
 module.exports = { urlFilter, currentTime }

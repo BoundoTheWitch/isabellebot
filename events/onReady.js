@@ -1,4 +1,4 @@
-const { Events, ActivityType } = require('discord.js');
+const { Events } = require('discord.js');
 
 module.exports = {
     name: Events.ClientReady,
@@ -12,7 +12,7 @@ module.exports = {
             date.getHours(),
             date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes(),
         ];
-        
+
         console.log(`${client.user.tag} online.\n${month}/${day}/${year} ${hours}:${minutes}`);
     }
 }

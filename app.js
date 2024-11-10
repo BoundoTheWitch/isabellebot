@@ -61,8 +61,13 @@ for (const file of eventFiles) {
     }
 }
 
-// TODO: Maybe add way to call channel ID from onReady.js file in the future, yeah?
-let channelLibrary, channelWorkout;
+// Look, I tried to make this work without relying on hacky methods,
+// but quite frankly, I am starting to lose my paitience. I may
+// have to re-write everything again in the future.
+// I'm too stressed out to get this working "properly."
+
+// Get channel IDs
+let channelLibrary, channelWorkout
 setTimeout(() => {
     let channelCache = client.channels.cache;
     channelCache.forEach((ch) => {
@@ -76,8 +81,7 @@ setTimeout(() => {
                 channelWorkout = ch.id;
         }
     });
-    
-}, 1000);
+}, 1200); // Execute in 1.2 seconds
 
 let quoteCounter = -1;
 let ranQuote = [
@@ -105,12 +109,16 @@ let ranQuote = [
     "You know what sounds good, right now? Reading, that's what! It's a new day!",
     "Nothing like the smell of a good book, coffee, and a good morning. It's time to begin a new day of reading!",
     "It's a new day! Let's celebrate it by reading!",
+    "Oh joy! A new day, a new chapter...or two even!"
 ];
 ranQuote.sort(() => Math.random() - 0.5);
 
+// READING
 // Runs every day at 6am
 cron.schedule('0 0 6 * * *', async () => {
+    console.log("Inside.");
     let quote;
+    const channel = client.channels.cache.get(channelLibrary);
     const lastPost = await db.getLastPost("READING");
     const stars = await db.getReadingStars();
     const embed = new EmbedBuilder()
@@ -118,9 +126,11 @@ cron.schedule('0 0 6 * * *', async () => {
         .setTitle(`⭐ Reading Star Board ⭐`)
         .setDescription(`${stars}`);
 
+    console.log(lastPost);
+
 
     if (lastPost)
-        channelLibrary.messages.fetch(lastPost).then(msg => msg.delete());
+        channel.messages.fetch(lastPost).then(msg => msg.delete());
 
 
     if (quoteCounter > ranQuote.length - 2) {
@@ -130,26 +140,25 @@ cron.schedule('0 0 6 * * *', async () => {
     quoteCounter++;
     quote = ranQuote[quoteCounter];
     
-    channelLibrary.send({ content: `${quote}\nDon't forget to leave your star later if you have done your reading.`, embeds: [embed] })
+    channel.send({ content: `${quote}\nDon't forget to leave your star later if you have done your reading.`, embeds: [embed] })
         .then(async msg => await db.newDay(msg.id));
 
 });
 
+// WORKOUT
 // Runs every week on Monday at 6am
 cron.schedule('0 0 6 * * Mon', async () => {
+    const channel = client.channels.cache.get(channelWorkout);
     const lastPost = await db.getLastPost("WORKOUT");
     const stars = await db.getWorkoutStars();
-    
     const embed = new EmbedBuilder()
         .setColor(0xf2cf74)
         .setTitle(`💪 Workout Star Board 💪`)
         .setDescription(`${stars}`);
-    
     if (lastPost)
-        channelWorkout.messages.fetch(lastPost).then(msg => msg.delete());
+        channel.messages.fetch(lastPost).then(msg => msg.delete());
 
-
-    channelWorkout.send({ content: `It's the start of a new week! Let's see how everyone did 👀`, embeds: [embed] })
+    channel.send({ content: `It's the start of a new week! Let's see how everyone did 👀`, embeds: [embed] })
         .then(async msg => await db.newWeek(msg.id));
 });
 

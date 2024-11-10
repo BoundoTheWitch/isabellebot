@@ -6,9 +6,23 @@ module.exports = {
     name: Events.MessageUpdate,
     async execute(oldMsg, newMsg) {
         const client = require('../app');
-        const logchannel = await client.channels.cache.find(ch => ch.name === "event-logs" && ch.guild.id === process.env.SERVER.toString());
+        
+        // const logchannel = await client.channels.cache.find(ch => ch.name === "event-logs" && ch.guild.id === process.env.SERVER.toString());
         const details = await messageUpdated(oldMsg.id, newMsg.content);
         
+        let eventsChannel;
+
+        let channelCache = client.channels.cache;
+        channelCache.forEach((ch) => {
+            let name = ch.name;
+            if (name.includes('event-logs')) {
+                if (!eventsChannel)
+                    eventsChannel = ch.id;
+            }
+        });
+
+        const channel = channelCache.get(eventsChannel);
+
         const embed = new EmbedBuilder()
             .setColor(0x4781f0)
             .setTitle(`Message was edited`)
@@ -36,7 +50,7 @@ module.exports = {
                 embed.addFields({ name: 'Too Old', value: `A message was edited but is from before what the database recorded.\nFor reference, the ID of the message is *${oldMsg.id}*` })
             }
 
-            await logchannel.send({ embeds: [embed] });
+            await channel.send({ embeds: [embed] });
         } catch (err) {
             console.error("Something went wrong when a message was updated", err);
         }
