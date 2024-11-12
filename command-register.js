@@ -1,7 +1,6 @@
 // Registers commands
 const fs = require('node:fs');
 const { REST, Routes } = require('discord.js');
-const { clientId, guildId, token } = require('./config.json');
 const dotenv = require('dotenv');
 dotenv.config();
 
