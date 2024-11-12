@@ -314,41 +314,6 @@ module.exports = {
         return res;
     },
     /**
-     * FOR INTERNAL USE ONLY. Manually enter data just in case
-     * @param {String} userID Discord ID
-     * @param {String} username Their display name
-     * @param {Integer} readingStars Current stars in reading
-     * @param {Integer} readingStreak Current streak in reading
-     * @param {Integer} readingHighest Highest streak in reading
-     * @param {Integer} readingPlaced
-     * @param {String} readingDate Date when they last left a reading star
-     * @param {Integer} workoutStars Current stars in workout
-     * @param {Integer} workoutStreak Current streak in workout
-     * @param {Integer} workoutHighest Highest streak in workout
-     * @param {Integer} workoutPlaced
-     * @param {String} workoutDate Date when they last left a workout star
-     */
-    manualEntry: async (userID, username, readingStars, readingStreak, readingHighest, readingPlaced, readingDate, workoutStars, workoutStreak, workoutHighest, workoutDate, workoutPlaced) => {
-        Stars.sync()
-            .then(() => {
-                Stars.create({
-                    user_id: userID,
-                    username: username,
-                    reading_count: readingStars,
-                    reading_streak: readingStreak,
-                    reading_highest: readingHighest,
-                    reading_placed: readingPlaced,
-                    last_reading: readingDate,
-                    workout_count: workoutStars,
-                    workout_streak: workoutStreak,
-                    workout_highest: workoutHighest,
-                    workout_placed: workoutPlaced,
-                    last_workout: workoutDate
-                });
-            })
-            .catch(err => console.error("Error when trying to manually add into database.", err));
-    },
-    /**
      * Console log everything from the database
      */
     getAll: async () => {
