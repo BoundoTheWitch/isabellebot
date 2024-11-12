@@ -74,6 +74,12 @@ const Posts = sequelize.define('posts', {
     content: DataTypes.STRING(2500)
 });
 
+/// TODO: Add new table for tracking QOTD use.
+// const QOTD = sequelize.define('qotd', {
+//     qotd_counter: DataTypes.INTEGER,
+//     qotd_used: DataTypes.INTEGER,
+// });
+
 sequelize.sync();
 
 module.exports = {    

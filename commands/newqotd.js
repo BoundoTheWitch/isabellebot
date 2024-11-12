@@ -1,6 +1,8 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const qotd = require('../misc/qotd.json')
 
+/// TODO: Update database.js to include interacting with database. (table: qotd --- cols: qotd_counter | qotd_used)
+
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('newqotd')
