@@ -29,4 +29,27 @@ const currentTime = () => {
     return `${hour}:${mins}${ampm}`;
 }
 
+
+/// TODO
+///     Make it return all the channel names and IDs.
+///     Then allow the use of String.includes() to get the ID of the channel.
+///     Reason: Channels may suddenly get named to something like "⁺the-library" instead of "the-library"
+/**
+ * Get the cached list of channels in the server and
+ * keeps the ID
+ * @param {*} client
+ * @param {*} arr Array to store values in
+ */
+const channelCache = (client, arr, names) => {
+    let channelCache = client.channels.cache;
+    channelCache.forEach((ch) => {
+        let name = ch.name;
+        if (name.includes('event-logs')) {
+            if (!eventsChannel)
+                eventsChannel = ch.id;
+        }
+    });
+
+}
+
 module.exports = { urlFilter, currentTime }
