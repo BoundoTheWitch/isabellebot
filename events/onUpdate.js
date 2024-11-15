@@ -7,7 +7,6 @@ module.exports = {
     async execute(oldMsg, newMsg) {
         const client = require('../app');
         
-        // const logchannel = await client.channels.cache.find(ch => ch.name === "event-logs" && ch.guild.id === process.env.SERVER.toString());
         const details = await messageUpdated(oldMsg.id, newMsg.content);
         
         let eventsChannel;
