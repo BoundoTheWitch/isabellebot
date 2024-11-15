@@ -11,12 +11,13 @@ module.exports = {
                 .setName('private')
                 .setDescription('If you want to keep your star private.')),
     async execute(interaction) {
+        /// TODO: Don't be scared. Clean this up. Even past self was like "yeah, this is doable."
         const currUser = await db.checkUser(interaction.user.id);
         const currChannel = interaction.channel.name;
         const private = interaction.options.getBoolean('private');
 
-        if (currChannel === 'the-library' || currChannel === 'diet-slash-exercise') {
-            const type = currChannel === "the-library" ? "READING" : "WORKOUT";
+        if (currChannel.includes('the-library') || currChannel.includes('diet-slash-exercise')) {
+            const type = currChannel.includes("the-library") ? "READING" : "WORKOUT";
         
             if (currUser) {
                 let status = await db.checkStar(interaction.user.id, type);
@@ -24,10 +25,10 @@ module.exports = {
                 if (status === "SAMEDAY")
                     await interaction.reply({ content: `Looks like you've already left a star today. Good job!\n(Start of a new day starts at \`6am\`. It's currently \`${currentTime()}\`)`, ephemeral: true });
                 else {
-                    if (currChannel === 'the-library') {
+                    if (currChannel.includes('the-library')) {
                         await db.addStar(interaction.user.id, interaction.member.displayName, 'READING', status);
                         await interaction.reply({ content: `⭐ Thank you for leaving your star today! ⭐`, ephemeral: private });
-                    } else if (currChannel === 'diet-slash-exercise') {
+                    } else if (currChannel.includes('diet-slash-exercise')) {
                         let outcome;
 
                         await db.addStar(interaction.user.id, interaction.member.displayName, 'WORKOUT', status);
