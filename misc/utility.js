@@ -49,7 +49,6 @@ const channelCache = (client, arr, names) => {
                 eventsChannel = ch.id;
         }
     });
-
 }
 
 module.exports = { urlFilter, currentTime }
