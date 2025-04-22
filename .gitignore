@@ -85,3 +85,6 @@ test.js
 
 # Config gile
 config.json
+
+# Scratch folder
+scratch
