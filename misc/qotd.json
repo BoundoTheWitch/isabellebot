@@ -1,9 +1,7 @@
 {
     "questions": [
         "What kind of music do you like to listen to? Share some genres/bands!",
-        "Would you consider yourself a morning person?",
         "Everyone has a favorite food or two. What about a dislike? What *#hotFoodTakes* do you have?",
-        "You get teleported to the last movie/show you watched. How screwed are you?\n(if it's political, then the last one that wasn't please!)",
         "Take the closest object to you (PG please!), then replace a word from the last song you listened to with the object. If it's a one word song then pick a random song from your playlist.",
         "What's your favorite type of jewlery? (necklace, rings, etc)",
         "WHAT...is your FAVOURITE **COLOUR(S)**?? /ref",
@@ -33,5 +31,5 @@
         "For all of the book readers: do you have a book you like to read again once and a while?",
         "Take the last game you played and replace a random word in the title with the last thing you ate.\n(ex: Animal Crossing: New PB&J, Pokemon: Fire Pizza)"
     ],
-    "lastupdated": "04/21/2024"
+    "lastupdated": "04/22/2024"
 }
