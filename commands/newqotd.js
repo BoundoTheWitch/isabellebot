@@ -26,19 +26,7 @@ module.exports = {
             counter = 0;
 
         question = qotd.questions[counter];
-        localStorage.setItem('qotdCounter', counter);
-
-        // if (localStorage.getItem('qotdCounter') === null) {
-        //     counter = 0;
-        //     console.log(`Counter does not exsist. Creating one...`);
-        // }
-
-        // if (counter < qotdCount) {
-        //     question = qotd.questions[counter];
-        //     counter++;
-
-        // }  else
-        //     counter = 0;        
+        localStorage.setItem('qotdCounter', counter);       
         
         const embed = new EmbedBuilder()
             .setColor(0xd8cd2d)
