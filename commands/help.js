@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
 const list = require('./list.json');
 
 let outcome = "";
@@ -15,6 +15,6 @@ module.exports = {
             .setColor(0xf2cf74)
             .setTitle("Isabelle Bot Help commands")
             .setDescription(outcome)
-        await interaction.reply({ embeds: [embed], ephemeral: true });
+        await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
     }
 };

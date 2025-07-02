@@ -33,6 +33,6 @@ module.exports = {
             .setTitle(`Another Question of the Day!`)
             .setDescription(`${question}`)
             .setFooter({text: `Questions last edited on ${lastUpdated} - ${qotdCount} total questions`});
-        await interaction.reply({ embeds: [embed], ephemeral: false });
+        await interaction.reply({ embeds: [embed] });
     }
 };

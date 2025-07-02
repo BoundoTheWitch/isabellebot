@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
 const db = require('../database');
 
 module.exports = {
@@ -11,6 +11,6 @@ module.exports = {
             .setColor(0xd8cd2d)
             .setTitle(`⭐ Star Board Leader Board ⭐`)
             .setDescription(`${stars}`);
-        await interaction.reply({ embeds: [embed], ephemeral: true });
+        await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
     }
 };

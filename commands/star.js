@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const db = require('../database');
 const { currentTime } = require('../misc/utility');
 
@@ -11,10 +11,10 @@ module.exports = {
                 .setName('private')
                 .setDescription('If you want to keep your star private.')),
     async execute(interaction) {
-        /// TODO: Don't be scared. Clean this up. Even past self was like "yeah, this is doable."
         const currUser = await db.checkUser(interaction.user.id);
         const currChannel = interaction.channel.name;
         const private = interaction.options.getBoolean('private');
+        const ephemeral = private ? MessageFlags.Ephemeral : null;
 
         if (currChannel.includes('the-library') || currChannel.includes('diet-slash-exercise')) {
             const type = currChannel.includes("the-library") ? "READING" : "WORKOUT";
@@ -23,11 +23,11 @@ module.exports = {
                 let status = await db.checkStar(interaction.user.id, type);
         
                 if (status === "SAMEDAY")
-                    await interaction.reply({ content: `Looks like you've already left a star today. Good job!\n(Start of a new day starts at \`6am\`. It's currently \`${currentTime()}\`)`, ephemeral: true });
+                    await interaction.reply({ content: `Looks like you've already left a star today. Good job!\n(Start of a new day starts at \`6am\`. It's currently \`${currentTime()}\`)`, flags: ephemeral });
                 else {
                     if (currChannel.includes('the-library')) {
                         await db.addStar(interaction.user.id, interaction.member.displayName, 'READING', status);
-                        await interaction.reply({ content: `⭐ Thank you for leaving your star today! ⭐`, ephemeral: private });
+                        await interaction.reply({ content: `⭐ Thank you for leaving your star today! ⭐`, flags: ephemeral });
                     } else if (currChannel.includes('diet-slash-exercise')) {
                         let outcome;
 
@@ -38,7 +38,7 @@ module.exports = {
                         else
                             outcome = `💪 Thank you for leaving your star today! 💪\n`;
                         
-                        await interaction.reply({ content: `${outcome}`, ephemeral: private });
+                        await interaction.reply({ content: `${outcome}`, flags: ephemeral });
                     }
                 }
             } else {
@@ -47,7 +47,7 @@ module.exports = {
                 await interaction.reply({ content: `Hey there ${interaction.user}! Looks like it's your first time. Welcome! I have recorded your first star. If you need some clarity of the rules, feel free to use the \`/starhelp\` command for more info and \`/starboard\` to see the leaderboard. This applies for reading and workout stars!` })
             }
         } else {
-            await interaction.reply({ content: 'Oops, you need to use that in `#the-library` or `#diet-slash-exercise`', ephemeral: true })
+            await interaction.reply({ content: 'Oops, you need to use that in `#the-library` or `#diet-slash-exercise`', flags: ephemeral })
         }
     }
 };

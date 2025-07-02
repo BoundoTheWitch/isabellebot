@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -13,6 +13,6 @@ module.exports = {
             .setColor(0xd8cd2d)
             .setTitle(`💪 Workout Stars 💪`)
             .setDescription(`The purpose of the Star Workout challenge is to encourage 30 minutes of workouts at least 4 times a week. Doing 4 workouts a week will earn you a Super Star ✨. Total number of stars earned will still be tracked.\n\nWhat consitutes a workout? Whatever is within your limitations. So general physical activities like long walks, cleaning, chasing your kid across the house because they found something they shouldn't be playing with--all still count, including regular workouts of course.`)
-        await interaction.reply({ embeds: [reading, workout], ephemeral: true })
+        await interaction.reply({ embeds: [reading, workout], flags: MessageFlags.Ephemeral })
     }
 };
