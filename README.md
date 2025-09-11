@@ -54,13 +54,13 @@ On top of the reading challenges, another idea was sprung up where users are enc
 * Working out 4 times a week will earn you a super star
 * Mondays is the start of a new week and will reset super star chances if one was not obtained already.
 
-# How does she run?
+## How does she run?
 
 ~~With legs. Thanks for attending my TED Talk.~~
 
 At first she was running on an old laptop that was running Node.js on a headless Debian set up. Since the bot isn't on multiple servers and there isn't that many interactions happening simultaneously I didn't see the harm. She's now running on a cloud-based service.
 
-# Anything I should know before eyeing on your code?
+## Anything I should know before eyeing on your code?
 
 Usually when I write code I try to focus on making sure the code can be maintained easily, such as avoiding hardcoding things, or avoid repeating code, or over-complicating it. Admittedly I didn't do it as much as I would've liked to, but I was in a hurry to try and get Isabelle back online after she was offline for about 2 years due to many complications. I did better than my earlier coding practices.
 
