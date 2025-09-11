@@ -31,7 +31,7 @@ I continue to update and change Isabelle Bot to get more experience in developin
 
 ## Star Board - Reading challenge
 
-Several memebers of the community came up with a challenge that helps encourage users who wish to read more. Anyone in the server is welcomed to join in. The rules of the challenge is simple:
+Several memebers of the community came up with a challenge that helps encourage people who wish to read more. Anyone in the server is welcomed to join in. The rules of the challenge is simple:
 
 * Read 30 minutes a day.
 * If you have done your reading then you leave a star.
@@ -39,7 +39,7 @@ Several memebers of the community came up with a challenge that helps encourage 
 * Only one star can be earned each day
 * Total number of stars are tracked so there's still a way to see reading progress
 
-Where Isabelle comes in is to help with tracking the stars. Originally a user was doing it all on their own updating a message to have a leaderboard on display. Isabelle helps with this.
+Where Isabelle comes in is to help with tracking the stars. Originally someone in the server was doing it all on their own, editing their first message to have a leaderboard on display. Isabelle helps with this.
 
 * Leave a star with `/star` instead of the original method that people were using where they would leave an emoji.
 * Isabelle updates a local database including what time someone leaves a star.
@@ -58,7 +58,7 @@ On top of the reading challenges, another idea was sprung up where users are enc
 
 ~~With legs. Thanks for attending my TED Talk.~~
 
-The code is all running on an old laptop that is running Node.js on a headless Debian set up. Not exactly the most ideal solution, but I do plan on switching over to a cloud-based solution again soon. Since Isabelle is running for a single Discord server and doesn't have to do a lot of memory or CPU intensive tasks, it does the job.
+At first she was running on an old laptop that was running Node.js on a headless Debian set up. Since the bot isn't on multiple servers and there isn't that many interactions happening simultaneously I didn't see the harm. She's now running on a cloud-based service.
 
 # Anything I should know before eyeing on your code?
 
