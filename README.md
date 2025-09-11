@@ -17,14 +17,14 @@ I continue to update and change Isabelle Bot to get more experience in developin
 
 <picture>
     <img alt="A Discord post saying 'check out this funny meme I found' with an image that simply says 'embarrassing image' as a silly example of posting the wrong image." src="./images/example-1.png">
-    <figcaption>A post with an image.</figcaption>
+    <figcaption>A post with an image. The post reads "check out this funny meme I found!" The picture used as an example is a black square with "EMBARRASSING IMAGE" written on it.</figcaption>
 </picture>
 
 <br>
 
 <picture>
     <img alt="An example of a log of a deleted image that contains an image. The post only shows the message." src="./images/example-2.png">
-    <figcaption>An example of a log of a deleted post that contains an image.</figcaption>
+    <figcaption>An example of a log of a deleted post that contains an image. It has the "check out this funny meme I found!" from before, but with no image. The next line is which channel it's from and who posted the image.</figcaption>
 </picture>
 
 <hr>
