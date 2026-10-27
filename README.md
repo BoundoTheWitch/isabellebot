@@ -15,17 +15,13 @@ I continue to update and change Isabelle Bot to get more experience in developin
 * Audits edited and deleted messages
 * - She does not save images. If the post has an image then nothing will show up on the event logs except for whatever the message contains. So if a post has an image with the message "check out this cool thing I found!" then the only thing that will get saved to the logs is the message but not the image. For safety reasons I would rather not have any images saved.
 
-<picture>
-    <img alt="A Discord post saying 'check out this funny meme I found' with an image that simply says 'embarrassing image' as a silly example of posting the wrong image." src="./images/example-1.png">
-    <figcaption>A post with an image. The post reads "check out this funny meme I found!" The picture used as an example is a black square with "EMBARRASSING IMAGE" written on it.</figcaption>
-</picture>
+### Original post
 
-<br>
+![Audit Example 1](https://github.com/BoundoTheWitch/isabellebot/blob/master/images/example-1.png?raw=true "An example Discord post with an image. The post reads 'check out this funny meme I found!' The picture used as an example is a black square with 'EMBARRASSING IMAGE' written on it.")
 
-<picture>
-    <img alt="An example of a log of a deleted image that contains an image. The post only shows the message." src="./images/example-2.png">
-    <figcaption>An example of a log of a deleted post that contains an image. It has the "check out this funny meme I found!" from before, but with no image. The next line is which channel it's from and who posted the image.</figcaption>
-</picture>
+### After it's deleted and what the audit shows
+
+![Audit Example 2](https://github.com/BoundoTheWitch/isabellebot/blob/master/images/example-2.png?raw=true "An example of a log of a deleted post that contains an image. It has the 'check out this funny meme I found!' from before, but with no image. The next line is which channel it's from and who posted the image.")
 
 <hr>
 
